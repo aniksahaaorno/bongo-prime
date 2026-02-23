@@ -3,8 +3,6 @@ import StatisticDemo from "./second/StatictisticDamo";
 export default async function Statistics() {
   const statisticsData = await fetchFraudStatistics();
 
-  console.log({statisticsData: statisticsData})
-
   if (!statisticsData.data.summary){
     return <div>
       no data found in db

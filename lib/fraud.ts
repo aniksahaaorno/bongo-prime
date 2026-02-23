@@ -9,6 +9,8 @@ export async function fetchFraudStatistics() {
       },
     );
 
+    console.log(response)
+
     if (!response.ok) {
       throw new Error("Failed to fetch fraud statistics");
     }
