@@ -1,15 +1,12 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { Upload, X, Plus, Trash2, Save, Eye, EyeOff } from "lucide-react";
+import { Upload, X, Plus, Trash2, Save } from "lucide-react";
 import { UploadeImage } from "@/app/components/uploadeImage";
 import { PreviewImages, ProductFormData } from "@/utils/product";
 import { toast } from "sonner";
-import DescriptionEditor from "./DescriptionEditor";
 
-// interface CategoryProps {
-//   allCategory:
-// }
+import DescriptionEditor from "./DescriptionEditor";
 
 export default function AddProductForm({ allCategory }: any) {
   const [formData, setFormData] = useState<ProductFormData>({
@@ -20,8 +17,6 @@ export default function AddProductForm({ allCategory }: any) {
     basePrice: "",
     purchase: "",
     discount: { type: "percentage", value: "" },
-    sku: "",
-    stockQuantity: "",
     stockStatus: "in-stock",
     categoryId: "",
     subCategoryId: "",
@@ -43,11 +38,16 @@ export default function AddProductForm({ allCategory }: any) {
   const [tagInput, setTagInput] = useState("");
   const [variantForm, setVariantForm] = useState({
     color: "",
-    size: "",
-    sku: "",
     price: "",
-    stock: "",
+    sizes: [] as { size: string; stock: string; sku: string }[],
   });
+
+  const [sizeInput, setSizeInput] = useState({
+    size: "",
+    stock: "",
+    sku: "",
+  });
+
   const [showVariantForm, setShowVariantForm] = useState(false);
   const [uploaded, setUploaded] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -55,16 +55,22 @@ export default function AddProductForm({ allCategory }: any) {
     thumbnail: null,
     gallery: [],
   });
-  const [thumbnailUpload, setThumbnailUpload] = useState<string | null>(null);
+  const [thumbnailUpload, setThumbnailUpload] = useState<
+    string | null
+  >(null);
   const [activeTab, setActiveTab] = useState("basic");
-  const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
-  const [selectSubCategory, setSelectSubCategory] = useState<string | null>(
-    null,
-  );
+  const [selectedCategory, setSelectedCategory] = useState<
+    any | null
+  >(null);
+  const [selectSubCategory, setSelectSubCategory] = useState<
+    string | null
+  >(null);
 
   // Handle basic inputs
   const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+    e: ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const target = e.target as HTMLInputElement;
     const { name, value, type, checked } = target;
@@ -89,8 +95,6 @@ export default function AddProductForm({ allCategory }: any) {
     }));
   };
 
-  //   Record<string, unknown>;
-
   // Auto generate slug
   const generateSlug = (title: string) => {
     return title
@@ -107,6 +111,57 @@ export default function AddProductForm({ allCategory }: any) {
     setFormData((prev) => ({
       ...prev,
       slug: generateSlug(title),
+    }));
+  };
+
+  // size handler
+  const handleSizeInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "size") {
+      const sku = generateSKU(productTitle, variantForm.color, value);
+
+      setSizeInput((prev) => ({
+        ...prev,
+        [name]: value,
+        sku: sku,
+      }));
+
+      return;
+    }
+
+    setSizeInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const addSizeToVariant = () => {
+    if (!sizeInput.size || !sizeInput.stock || !sizeInput.sku) return;
+
+    const exists = variantForm.sizes.some(
+      (s) => s.size === sizeInput.size,
+    );
+
+    if (exists) {
+      alert("Size already added");
+      return;
+    }
+
+    setVariantForm((prev) => ({
+      ...prev,
+      sizes: [...prev.sizes, sizeInput],
+    }));
+
+    setSizeInput({ size: "", stock: "", sku: "" });
+  };
+
+  const removeSizeFromVariant = (index: number) => {
+    setVariantForm((prev) => ({
+      ...prev,
+      sizes: prev.sizes.filter((_, i) => i !== index),
     }));
   };
 
@@ -129,7 +184,9 @@ export default function AddProductForm({ allCategory }: any) {
   };
 
   // Handle thumbnail
-  const handleThumbnailChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleThumbnailChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       setIsUploading(true);
@@ -172,9 +229,15 @@ export default function AddProductForm({ allCategory }: any) {
     });
   };
 
-  const generateSKU = (productTitle: string, color: string, size: string) => {
+  const generateSKU = (
+    productTitle: string,
+    color: string,
+    size: string,
+  ) => {
     const productCode = productTitle.substring(0, 3).toUpperCase();
-    const colorCode = color ? color.substring(0, 3).toUpperCase() : "NA";
+    const colorCode = color
+      ? color.substring(0, 3).toUpperCase()
+      : "NA";
     const sizeCode = size ? size.substring(0, 3).toUpperCase() : "ST";
     const random = Math.floor(100 + Math.random() * 900);
 
@@ -195,10 +258,14 @@ export default function AddProductForm({ allCategory }: any) {
     }));
   };
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const value = e.target.value;
 
-    const foundCategory = allCategory.find((ctg: any) => ctg._id === value);
+    const foundCategory = allCategory.find(
+      (ctg: any) => ctg._id === value,
+    );
 
     setFormData((prev) => ({
       ...prev,
@@ -209,7 +276,9 @@ export default function AddProductForm({ allCategory }: any) {
     setSelectedCategory(foundCategory || null);
   };
 
-  const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSubCategoryChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setSelectSubCategory(e.target.value);
 
     setFormData((prev) => ({
@@ -227,41 +296,37 @@ export default function AddProductForm({ allCategory }: any) {
         [name]: value,
       };
 
-      // auto SKU generate only when color or size changes
-      if (name === "color" || name === "size") {
-        updated.sku = generateSKU(
-          productTitle,
-          name === "color" ? value : prev.color,
-          name === "size" ? value : prev.size,
-        );
-      }
-
       return updated;
     });
   };
 
   const addVariant = () => {
-    if (
-      variantForm.color &&
-      variantForm.size &&
-      variantForm.sku &&
-      variantForm.stock
-    ) {
-      setFormData((prev) => ({
-        ...prev,
-        variants: [
-          ...prev.variants,
-          {
-            attributes: { color: variantForm.color, size: variantForm.size },
-            sku: variantForm.sku,
-            price: variantForm.price || undefined,
-            stock: parseInt(variantForm.stock),
-          },
-        ],
-      }));
-      setVariantForm({ color: "", size: "", sku: "", price: "", stock: "" });
-      setShowVariantForm(false);
+    if (!variantForm.color || variantForm.sizes.length === 0) {
+      alert("Add color and at least one size");
+      return;
     }
+
+    setFormData((prev) => ({
+      ...prev,
+      variants: [
+        ...prev.variants,
+        {
+          color: variantForm.color,
+          price: variantForm.price,
+          sizes: variantForm.sizes.map((s) => ({
+            size: s.size,
+            stock: parseInt(s.stock),
+            sku: s.sku,
+          })),
+        },
+      ],
+    }));
+
+    setVariantForm({
+      color: "",
+      price: "",
+      sizes: [],
+    });
   };
 
   const removeVariant = (index: number) => {
@@ -271,7 +336,9 @@ export default function AddProductForm({ allCategory }: any) {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
 
     const payload = {
@@ -284,8 +351,6 @@ export default function AddProductForm({ allCategory }: any) {
       deletedAt: "",
       createdAt: new Date().toLocaleString(),
     };
-
-
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/api/products`,
@@ -316,8 +381,6 @@ export default function AddProductForm({ allCategory }: any) {
       basePrice: "",
       purchase: "",
       discount: { type: "percentage", value: "" },
-      sku: "",
-      stockQuantity: "",
       stockStatus: "in-stock",
       categoryId: "",
       subCategoryId: "",
@@ -351,7 +414,13 @@ export default function AddProductForm({ allCategory }: any) {
     string,
     (keyof ProductFormData | string)[]
   > = {
-    basic: ["title", "shortDescription", "description", "categoryId", "tags"],
+    basic: [
+      "title",
+      "shortDescription",
+      "description",
+      "categoryId",
+      "tags",
+    ],
     pricing: ["basePrice"],
     inventory: ["sku", "stockQuantity", "stockStatus"],
     media: ["thumbnail"],
@@ -359,7 +428,9 @@ export default function AddProductForm({ allCategory }: any) {
     seo: [], // submit time এ handle হবে
   };
 
-  const currentTabIndex = tabs.findIndex((tab) => tab.id === activeTab);
+  const currentTabIndex = tabs.findIndex(
+    (tab) => tab.id === activeTab,
+  );
 
   const isCurrentTabValid = () => {
     const requiredFields = requiredFieldsByTab[activeTab] || [];
@@ -372,7 +443,10 @@ export default function AddProductForm({ allCategory }: any) {
 
       // thumbnail check
       if (field === "thumbnail") {
-        return formData.thumbnail !== null || previewImages.thumbnail !== null;
+        return (
+          formData.thumbnail !== null ||
+          previewImages.thumbnail !== null
+        );
       }
       // normal string check
       const value = formData[field as keyof ProductFormData];
@@ -402,7 +476,9 @@ export default function AddProductForm({ allCategory }: any) {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Create Product
           </h1>
-          <p className="text-gray-500 mt-2">Add a new product to your store</p>
+          <p className="text-gray-500 mt-2">
+            Add a new product to your store
+          </p>
         </div>
 
         {/* Tabs */}
@@ -480,19 +556,13 @@ export default function AddProductForm({ allCategory }: any) {
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Full Description
                 </label>
-                {/* <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Detailed product description"
-                  rows={5}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                /> */}
                 <DescriptionEditor
                   value={formData.description}
                   onChange={(val) =>
-                    setFormData((prev) => ({ ...prev, description: val }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: val,
+                    }))
                   }
                 />
               </div>
@@ -533,7 +603,8 @@ export default function AddProductForm({ allCategory }: any) {
                     placeholder="Add a tag and press button"
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                     onKeyPress={(e) =>
-                      e.key === "Enter" && (e.preventDefault(), addTag())
+                      e.key === "Enter" &&
+                      (e.preventDefault(), addTag())
                     }
                   />
                   <button
@@ -619,13 +690,17 @@ export default function AddProductForm({ allCategory }: any) {
                           ...prev,
                           discount: {
                             ...prev.discount,
-                            type: e.target.value as "percentage" | "flat",
+                            type: e.target.value as
+                              | "percentage"
+                              | "flat",
                           },
                         }))
                       }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
-                      <option value="percentage">Percentage (%)</option>
+                      <option value="percentage">
+                        Percentage (%)
+                      </option>
                       <option value="flat">Flat (৳)</option>
                     </select>
                   </div>
@@ -642,7 +717,10 @@ export default function AddProductForm({ allCategory }: any) {
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
-                          discount: { ...prev.discount, value: e.target.value },
+                          discount: {
+                            ...prev.discount,
+                            value: e.target.value,
+                          },
                         }))
                       }
                       placeholder="0"
@@ -658,36 +736,6 @@ export default function AddProductForm({ allCategory }: any) {
           {activeTab === "inventory" && (
             <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  SKU (Stock Keeping Unit) *
-                </label>
-                <input
-                  type="text"
-                  name="sku"
-                  value={formData.sku}
-                  onChange={handleInputChange}
-                  placeholder="e.g., PRD-001"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Stock Quantity
-                  </label>
-                  <input
-                    type="number"
-                    name="stockQuantity"
-                    value={formData.stockQuantity}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="0"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-900 mb-2">
                     Stock Status *
@@ -781,8 +829,8 @@ export default function AddProductForm({ allCategory }: any) {
                     <div className="flex flex-col items-center gap-2">
                       <Upload className="text-gray-400" size={32} />
                       <span className="text-sm text-gray-600">
-                        Click to upload {5 - formData.gallery.length} more
-                        images
+                        Click to upload {5 - formData.gallery.length}{" "}
+                        more images
                       </span>
                     </div>
                     <input
@@ -853,13 +901,7 @@ export default function AddProductForm({ allCategory }: any) {
                             Color
                           </th>
                           <th className="text-left py-3 px-3 font-medium text-gray-700">
-                            Size
-                          </th>
-                          <th className="text-left py-3 px-3 font-medium text-gray-700">
-                            SKU
-                          </th>
-                          <th className="text-left py-3 px-3 font-medium text-gray-700">
-                            Stock
+                            Attributes
                           </th>
                           <th className="text-left py-3 px-3 font-medium text-gray-700">
                             Action
@@ -868,15 +910,49 @@ export default function AddProductForm({ allCategory }: any) {
                       </thead>
                       <tbody>
                         {formData.variants.map((variant, index) => (
-                          <tr key={index} className="border-b border-gray-100">
+                          <tr
+                            key={index}
+                            className="border-b border-gray-100"
+                          >
                             <td className="py-3 px-3">
-                              {variant.attributes.color}
+                              {variant.color}
                             </td>
                             <td className="py-3 px-3">
-                              {variant.attributes.size}
+                              <table className="w-full">
+                                <thead>
+                                  <tr className="border-b border-gray-300">
+                                    <th className="py-2 text-left font-semibold">
+                                      Size
+                                    </th>
+                                    <th className="py-2 text-left font-semibold">
+                                      Stock
+                                    </th>
+                                    <th className="py-2 text-left font-semibold">
+                                      SKU
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {variant.sizes.map((s) => (
+                                    <tr
+                                      key={s.size}
+                                      className="border-b border-gray-200 hover:bg-gray-50"
+                                    >
+                                      <td className="py-2 font-medium">
+                                        {s.size}
+                                      </td>
+                                      <td className="py-2 font-medium">
+                                        {s.stock}
+                                      </td>
+                                      <td className="py-2 font-medium">
+                                        {s.sku}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
                             </td>
-                            <td className="py-3 px-3">{variant.sku}</td>
-                            <td className="py-3 px-3">{variant.stock}</td>
+
                             <td className="py-3 px-3">
                               <button
                                 type="button"
@@ -898,49 +974,93 @@ export default function AddProductForm({ allCategory }: any) {
               {showVariantForm ? (
                 <div className="border border-gray-300 rounded-lg p-4 space-y-4 bg-gray-50">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
+                    <div className="col-span-full">
+                      <label className="block text-sm font-medium mb-2">
                         Color
                       </label>
                       <input
                         type="text"
-                        name="color"
                         value={variantForm.color}
-                        required
-                        onChange={handleVariantChange}
-                        placeholder="e.g., Red"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        onChange={(e) =>
+                          setVariantForm((prev) => ({
+                            ...prev,
+                            color: e.target.value,
+                          }))
+                        }
+                        className="w-full px-4 py-2 border rounded-lg"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        Size
-                      </label>
-                      <input
-                        type="text"
-                        name="size"
-                        value={variantForm.size}
-                        onChange={handleVariantChange}
-                        required
-                        placeholder="e.g., M"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
+
+                    <div className="mt-4 col-span-full">
+                      <h4 className="font-semibold mb-3">
+                        Add Sizes with Stock
+                      </h4>
+
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <input
+                          type="text"
+                          name="size"
+                          value={sizeInput.size}
+                          onChange={handleSizeInputChange}
+                          placeholder="Size (e.g., XL)"
+                          className="px-4 py-2 border rounded-lg"
+                        />
+
+                        <input
+                          type="number"
+                          name="stock"
+                          value={sizeInput.stock}
+                          onChange={handleSizeInputChange}
+                          placeholder="Stock"
+                          className="px-4 py-2 border rounded-lg"
+                        />
+
+                        <input
+                          type="text"
+                          name="sku"
+                          value={sizeInput.sku}
+                          onChange={handleSizeInputChange}
+                          placeholder="SKU (auto-generated)"
+                          className="px-4 py-2 border rounded-lg"
+                          disabled
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={addSizeToVariant}
+                        className="px-4 py-2 bg-primary text-white rounded-lg mb-4 w-[200px]"
+                      >
+                        Add Size
+                      </button>
+
+                      {variantForm.sizes.length > 0 && (
+                        <div className="space-y-2">
+                          {variantForm.sizes.map((s, index) => (
+                            <div
+                              key={index}
+                              className="flex justify-between items-center border px-3 py-2 rounded"
+                            >
+                              <span>
+                                Size: {s.size} - {s.stock} pcs
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  removeSizeFromVariant(index)
+                                }
+                                className="text-red-500"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        SKU
-                      </label>
-                      <input
-                        type="text"
-                        name="sku"
-                        value={variantForm.sku}
-                        readOnly
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
+                  <div>
                     <div>
                       <label className="block text-sm font-medium text-gray-900 mb-2">
                         Price (Optional)
@@ -956,21 +1076,6 @@ export default function AddProductForm({ allCategory }: any) {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Stock *
-                    </label>
-                    <input
-                      type="number"
-                      name="stock"
-                      value={variantForm.stock}
-                      required
-                      onChange={handleVariantChange}
-                      placeholder="0"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
                   </div>
 
                   <div className="flex gap-3 flex-col sm:flex-row">
@@ -1045,14 +1150,17 @@ export default function AddProductForm({ allCategory }: any) {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
                   />
                   <p className="text-xs text-gray-500">
-                    {formData.seo.metaDescription.length}/160 characters
+                    {formData.seo.metaDescription.length}/160
+                    characters
                   </p>
                 </div>
               </div>
 
               {/* Visibility */}
               <div className="pt-4 border-t border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-3">Visibility</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">
+                  Visibility
+                </h3>
 
                 <div className="space-y-3">
                   <label className="flex items-center gap-3 cursor-pointer">
