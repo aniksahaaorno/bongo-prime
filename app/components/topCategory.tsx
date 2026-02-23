@@ -47,7 +47,7 @@ export const TopCategories = ({ categories }: TopCategoriesProps) => {
       ) : (
         <div>
           <div>
-            <h2 className="text-xl lg:text-4xl pl-4 text-center uppercase font-semibold mb-5 block lg:hidden">
+            <h2 className="text-xl lg:text-4xl pl-4 text-center uppercase font-semibold mb-5 block">
               Top Categories
             </h2>
           </div>

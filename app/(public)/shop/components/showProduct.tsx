@@ -487,7 +487,6 @@
 
 // export default ProductCard;
 
-
 "use client";
 
 import { ProductFormData } from "@/utils/product";
@@ -507,13 +506,20 @@ interface GroupedProducts {
   [categoryName: string]: ProductFormData[];
 }
 
-const ProductCard = ({ products }: { products: ProductFormData[] }) => {
-  const groupedProducts: GroupedProducts = products.reduce((acc, pro) => {
-    const catName = pro.category;
-    if (!acc[catName]) acc[catName] = [];
-    acc[catName].push(pro);
-    return acc;
-  }, {} as GroupedProducts);
+const ProductCard = ({
+  products,
+}: {
+  products: ProductFormData[];
+}) => {
+  const groupedProducts: GroupedProducts = products.reduce(
+    (acc, pro) => {
+      const catName = pro.category;
+      if (!acc[catName]) acc[catName] = [];
+      acc[catName].push(pro);
+      return acc;
+    },
+    {} as GroupedProducts,
+  );
 
   return (
     <div className="w-full space-y-16 py-8 px-3">
@@ -558,6 +564,8 @@ const CategoryCarousel = ({
             delay: 2500,
             disableOnInteraction: true,
           }}
+          slidesPerView={2}
+          spaceBetween={10}
           navigation={{
             nextEl: "#custom-show-product-next",
             prevEl: "#custom-show-product-prev",

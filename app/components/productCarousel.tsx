@@ -188,7 +188,8 @@ const ProductCarousel = ({
               Top Selling Products
             </h2>
             <p className="text-gray-600 text-center">
-              Check out our latest top selling products and bestsellers.
+              Check out our latest top selling products and
+              bestsellers.
             </p>
           </div>
         ) : (
@@ -210,6 +211,8 @@ const ProductCarousel = ({
               delay: 2500,
               disableOnInteraction: true,
             }}
+            slidesPerView={2}
+            spaceBetween={10}
             navigation={{
               nextEl: "#custom-next",
               prevEl: "#custom-prev",
@@ -217,7 +220,7 @@ const ProductCarousel = ({
             }}
             breakpoints={{
               640: {
-                slidesPerView: 1,
+                slidesPerView: 2,
                 spaceBetween: 20,
               },
               768: {
