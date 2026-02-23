@@ -285,6 +285,8 @@ export default function AddProductForm({ allCategory }: any) {
       createdAt: new Date().toLocaleString(),
     };
 
+
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/api/products`,
       {
@@ -302,14 +304,37 @@ export default function AddProductForm({ allCategory }: any) {
       toast.error(result.message);
     }
 
-    if (!res.ok) {
-      toast.error(`HTTP error! status: ${res.status}`);
+    if (result.success) {
+      toast.success(result?.message || "Product Added successfully");
     }
 
-    if (res.ok) {
-      toast.success("Form submitted! Check console for data.");
-    }
-
+    setFormData({
+      title: "",
+      slug: "",
+      description: "",
+      shortDescription: "",
+      basePrice: "",
+      purchase: "",
+      discount: { type: "percentage", value: "" },
+      sku: "",
+      stockQuantity: "",
+      stockStatus: "in-stock",
+      categoryId: "",
+      subCategoryId: "",
+      category: "",
+      subCategory: "",
+      tags: [],
+      thumbnail: null,
+      gallery: [],
+      variants: [],
+      videoLink: "",
+      seo: {
+        metaTitle: "",
+        metaDescription: "",
+      },
+      isDraft: false,
+      featured: false,
+    });
     setActiveTab("basic");
   };
 

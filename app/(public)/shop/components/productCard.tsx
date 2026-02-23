@@ -205,7 +205,7 @@ const ProductCard = ({ product }: { product: any }) => {
             }}
           >
             <p className="text-xs text-gray-500 line-clamp-2">
-              {product.description.slice(0, 80)}...
+              {product?.description?.slice(0, 80)}...
             </p>
           </div>
 

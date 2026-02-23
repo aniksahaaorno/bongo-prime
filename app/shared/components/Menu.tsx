@@ -8,6 +8,7 @@ export const MenuNavbar = ({ categories }: any) => {
   const [activeCategory, setActiveCategory] = useState("home");
   const [open, setOpen] = useState(false);
 
+
   const handleClick = (id: string) => {
     setActiveCategory(id);
     setOpen(false);
@@ -121,7 +122,7 @@ export const MenuNavbar = ({ categories }: any) => {
         {/* Mobile Navigation */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+            open ? "max-h-125 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <nav className="py-4 space-y-1">

@@ -32,7 +32,7 @@ export default function OTPVerificationWrapper({
   const [blockTimeRemaining, setBlockTimeRemaining] =
     useState<number>(0);
 
-  console.log(orderId, amount, paymentMethod);
+
 
   //   const orderId =
   //     typeof window !== "undefined"

@@ -31,7 +31,7 @@ export const BookCard = () => {
             <ShoppingCart className="w-5 h-5 text-gray-700 group-hover:text-primary transition-colors duration-200 group-hover:scale-110 transform" />
             
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md animate-pulse">
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-linear-to-br from-red-500 to-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md animate-pulse">
                 {cartCount > 9 ? "9+" : cartCount}
               </span>
             )}

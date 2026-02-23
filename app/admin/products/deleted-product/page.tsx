@@ -1,6 +1,6 @@
 import { getDeletedProduct } from '@/lib/products';
 import React from 'react'
-import ProductTable from '../components/allProduct';
+import DeletedProductsTable from '../components/deletedProducts';
 
 const DeletedProducts = async() => {
 
@@ -9,18 +9,9 @@ const DeletedProducts = async() => {
   const result = res.data;
 
 
-
-  const productDescription = {
-    title: "Deleted Product",
-    subTitle: "Manage your deleted product inventory",
-  };
-
   return (
     <div>
-      <ProductTable
-        INITIAL_PRODUCTS={result}
-        description={productDescription}
-      />
+      <DeletedProductsTable initialProducts={result} />
     </div>
   );
 }

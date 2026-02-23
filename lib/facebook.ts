@@ -4,8 +4,8 @@ export const getFacebookPixelCredential = async () => {
     {
       cache: "no-store",
     }
-  );
 
+  );
 
   return res.json();
 };

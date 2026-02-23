@@ -87,17 +87,28 @@ export default function ProductVariant({
     ).values(),
   );
 
+
+
   //   catch the available size in the variants
   const sizes = [...new Set(variants.map((v) => v.attributes.size))];
 
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [selectedSize, setSelectedSize] = useState(sizes[0]);
+  // const [selectedColor, setSelectedColor] = useState(colors[0]);
+  // const [selectedSize, setSelectedSize] = useState(sizes[0]);
 
-  const productSize = selectedSize.split(",");
+  const [selectedColor, setSelectedColor] = useState(colors[0] ?? null);
+  const [selectedSize, setSelectedSize] = useState(sizes[0] ?? "");
+
+  // const productSize = selectedSize.split(",");
+  const productSize = selectedSize ? selectedSize.split(",") : [];
+
+  // const [selectedProductSize, setSelectedProductSize] = useState(
+  //   productSize[0],
+  // );
 
   const [selectedProductSize, setSelectedProductSize] = useState(
-    productSize[0],
+    productSize[0] ?? "",
   );
+
   const [quantity, setQuantity] = useState(1);
 
   //   increase or decrease the quantity of product
@@ -167,7 +178,6 @@ export default function ProductVariant({
     }, 350);
   };
 
-
   // redirect on the what 's app
   const handleOrderWhatsApp = () => {
     handleWhatsApp(quantity);
@@ -195,18 +205,38 @@ export default function ProductVariant({
   };
 
   //   variant selected fun
-  const selectedVariant = variants.find(
-    (v) =>
-      normalize(v.attributes.color) === normalize(selectedColor.name) &&
-      normalize(v.attributes.size) === normalize(selectedSize),
-  );
+  // const selectedVariant = variants.find(
+  //   (v) =>
+  //     normalize(v.attributes.color) === normalize(selectedColor.name) &&
+  //     normalize(v.attributes.size) === normalize(selectedSize),
+  // );
+
+  const selectedVariant =
+    variants.length === 0
+      ? null
+      : variants.find(
+          (v) =>
+            normalize(v.attributes.color) ===
+              normalize(selectedColor?.name || "") &&
+            normalize(v.attributes.size) === normalize(selectedSize),
+        );
+
+  const hasVariants = variants.length > 0;
 
   //   condition for display the stock
-  const availabilityText = selectedVariant
-    ? selectedVariant.stock < 5
-      ? "Stock almost finished"
-      : "In Stock"
-    : "Unavailable";
+  // const availabilityText = selectedVariant
+  //   ? selectedVariant.stock < 5
+  //     ? "Stock almost finished"
+  //     : "In Stock"
+  //   : "Unavailable";
+
+  const availabilityText = !hasVariants
+    ? "No variant available"
+    : selectedVariant
+      ? selectedVariant.stock < 5
+        ? "Stock almost finished"
+        : "In Stock"
+      : "Unavailable";
 
   // check the sku is exit or not
   const sku = selectedVariant?.sku ?? "N/A";
@@ -261,12 +291,12 @@ export default function ProductVariant({
       {/* COLOR */}
       <div className="rounded-lg bg-white border border-gray-200 p-4">
         <p className="mb-3 text-sm font-medium">
-          Color: <span className="font-semibold">{selectedColor.name}</span>
+          Color: <span className="font-semibold">{selectedColor?.name}</span>
         </p>
 
         <div className="flex flex-wrap gap-3">
           {colors.map((color) => {
-            const bgColor = resolveColor(color.name, color.hex);
+            const bgColor = resolveColor(color?.name, color?.hex);
 
             return (
               <button
@@ -341,8 +371,9 @@ export default function ProductVariant({
           <>
             {/* Add to cart */}
             <button
+              disabled={!hasVariants}
               onClick={() => handleAddToCart()}
-              className="flex items-center gap-2 px-4 py-2 border text-primary-foreground border-primary text-primary rounded-lg hover:cursor-pointer hover:bg-primary hover:!text-white font-medium"
+              className="flex items-center gap-2 px-4 py-2 border text-primary border-primary rounded-lg hover:cursor-pointer hover:bg-primary hover:text-white! font-medium"
             >
               <ShoppingCart size={18} /> Add to Cart
             </button>
@@ -358,10 +389,11 @@ export default function ProductVariant({
 
             {/* Buy Now */}
             <button
+              disabled={!hasVariants}
               onClick={handleBuyNow}
               className="px-5 py-2 bg-primary text-white rounded-lg font-semibold hover:opacity-90 hover:from-primary-foreground hover:cursor-pointer hover:to-primary w-full"
             >
-              ক্রয় করুন 
+              ক্রয় করুন
             </button>
           </>
         )}
@@ -372,7 +404,7 @@ export default function ProductVariant({
             onClick={() => onCloseModal?.()}
             className="flex-1 border border-gray-300 py-2 rounded-lg text-sm hover:bg-gray-100"
           >
-            আরো ক্রয় করুন 
+            আরো ক্রয় করুন
           </button>
           {isBuyNow === true ? (
             <button

@@ -9,7 +9,6 @@ const ShowAllProduct = async () => {
   const result = await getFeaturedProduct();
   const products = res.data;
 
-  console.log(result)
 
   if (products?.length === 0) {
     return (
@@ -20,7 +19,7 @@ const ShowAllProduct = async () => {
   }
 
   return (
-    <div className="min-h-screen container mx-auto my-10">
+    <div className="min-h-screen container max-w-7xl mx-auto my-10">
       <div className="my-5">
         <h1 className="text-4xl font-bold pl-4">All Product</h1>
         <p className="text-sm pl-4 text-gray-700">

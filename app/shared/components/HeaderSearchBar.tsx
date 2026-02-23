@@ -29,7 +29,7 @@ export default function HeaderSearchBar({ categories, name, phone }: any) {
               onClick={() => setIsOpen(!isOpen)}
               className="flex items-center gap-2 px-5 py-3.5 text-sm font-medium text-gray-700 hover:text-primary transition-colors border-r border-gray-200 whitespace-nowrap group"
             >
-              <span className="max-w-[120px] truncate">{selectCategory}</span>
+              <span className="max-w-30 truncate">{selectCategory}</span>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                 fill="none"

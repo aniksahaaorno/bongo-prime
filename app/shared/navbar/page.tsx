@@ -23,7 +23,7 @@ const Navbar = async () => {
   return (
     <header className="w-full bg-white sticky top-10 z-50 shadow-sm">
       {/* Top Bar - Info & Account */}
-      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200">
+      <div className="bg-linear-to-r from-gray-50 to-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-2 md:py-0">
           <div className="h-10 flex justify-between items-center text-sm">
             <p className="text-gray-600 font-medium hidden md:block">
@@ -42,9 +42,9 @@ const Navbar = async () => {
       {/* Main Header - Logo, Search, Cart */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between md:py-5 md:py-6 gap-4 md:gap-6 mt-2">
+          <div className="flex items-center justify-between md:py-6 gap-4 md:gap-6 mt-2">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <ComLogo />
             </div>
 
@@ -80,7 +80,7 @@ const Navbar = async () => {
       </div>
 
       {/* Promotional Marquee */}
-      <MarqueeText text={marqueeText.data.text} />
+      <MarqueeText text={marqueeText?.data?.text || "marquee text here"} />
     </header>
   );
 };

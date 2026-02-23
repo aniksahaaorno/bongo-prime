@@ -109,7 +109,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
     });
   };
 
-  console.log({order: order})
+
 
 
 
@@ -412,7 +412,7 @@ const AllProductTable = ({
     null,
   );
 
-  console.log(orders);
+
 
   const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>(
     [],

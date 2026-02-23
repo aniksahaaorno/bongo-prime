@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { handleWhatsApp } from "./handleWhatsApp";
 import ProductVariant from "./ProductVariants";
 import Link from "next/link";
+import Image from "next/image";
 
 export const SingleProductCard = ({ product }: { product: any }) => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
@@ -19,16 +20,18 @@ export const SingleProductCard = ({ product }: { product: any }) => {
 
   const from = "cardButton";
 
+  console.log({product: product})
+
   const productPrice =
-    product.discount.type === "percentage"
+    product?.discount?.type === "percentage"
       ? Math.floor(
           Number(product.basePrice) -
             (Number(product.basePrice) *
-              Number(product.discount.value)) /
+              Number(product?.discount?.value)) /
               100,
         )
       : Math.max(
-          Number(product.basePrice) - Number(product.discount.value),
+          Number(product.basePrice) - Number(product?.discount?.value),
           0,
         );
 
@@ -88,6 +91,8 @@ export const SingleProductCard = ({ product }: { product: any }) => {
     setIsHovered(false);
   };
 
+  console.log({discountedPrice: discountedPrice})
+
   return (
     <div
       className="group/product bg-white overflow-hidden hover:shadow-lg transition-all duration-300 relative border border-gray-200"
@@ -136,9 +141,7 @@ export const SingleProductCard = ({ product }: { product: any }) => {
             }`}
             title="Add to Wishlist"
           >
-            <Heart
-              className={`w-4 h-4 ${isFavorite ? "fill-current" : ""}`}
-            />
+            <Heart className={`w-4 h-4 ${isFavorite ? "fill-current" : ""}`} />
           </button>
           <button
             onClick={() => handleWhatsApp()}
@@ -155,11 +158,12 @@ export const SingleProductCard = ({ product }: { product: any }) => {
             className="block relative"
             href={`/shop/${product.categoryId}/${product.slug}`}
           >
-            <img
+            <Image
               src={product.thumbnail}
               alt={product.title}
-              className="w-full h-80 object-cover transition-opacity duration-300"
-              style={{ opacity: 0.9}}
+              width={300}
+              height={300}
+              className="w-full h-100 object-cover transition-opacity duration-300"
             />
           </Link>
         </div>
@@ -196,23 +200,23 @@ export const SingleProductCard = ({ product }: { product: any }) => {
         </h3>
 
         {/* Description - shows on hover */}
-        <div
+        {/* <div
           className="overflow-hidden transition-all duration-500 ease-in-out"
           style={{
             maxHeight: "100px",
-            opacity:  1,
+            opacity: 1,
             marginBottom: "12px",
           }}
         >
           <p className="text-base text-gray-500 line-clamp-2">
             {product.description.slice(0, 80)}...
           </p>
-        </div>
+        </div> */}
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg font-bold text-gray-900">
-            ৳{discountedPrice}
+            ৳{discountedPrice ? discountedPrice : product.basePrice}
           </span>
           {hasDiscount && (
             <>
@@ -236,7 +240,7 @@ export const SingleProductCard = ({ product }: { product: any }) => {
               onClick={handleBuyNow}
               className="flex-1 bg-primary text-white py-2 text-xs font-semibold hover:bg-primary/90 transition-colors"
             >
-              অর্ডার করুন 
+              অর্ডার করুন
             </button>
             <button
               onClick={() => handleWhatsApp()}
@@ -269,13 +273,9 @@ export const SingleProductCard = ({ product }: { product: any }) => {
                 ×
               </button>
 
-              <h2 className="text-lg font-semibold mb-2">
-                অর্ডার করুন
-              </h2>
+              <h2 className="text-lg font-semibold mb-2">অর্ডার করুন</h2>
 
-              <p className="text-sm text-gray-600 mb-4">
-                {product.title}
-              </p>
+              <p className="text-sm text-gray-600 mb-4">{product.title}</p>
               <div>
                 <ProductVariant
                   variants={product.variants}
