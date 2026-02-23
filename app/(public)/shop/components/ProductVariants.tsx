@@ -11,16 +11,15 @@ import { fbEvent } from "@/utils/fbPixel";
 import { handleWhatsApp } from "./handleWhatsApp";
 import { ProductFormData } from "@/utils/product";
 
-type Variant = {
-  attributes: {
-    color: string;
-    colorHex?: string;
+interface Variant {
+  color: string;
+  price: string;
+  sizes: {
     size: string;
-  };
-  sku: string;
-  stock: number;
-  price?: string;
-};
+    stock: number;
+    sku: string;
+  }[];
+}
 
 interface productDetails {
   productPrice: number;
@@ -34,7 +33,6 @@ type Props = {
   from: string;
   productDetails: productDetails;
   onCloseModal?: () => void;
-  onSelectionChange?: ((data: any) => void | undefined) | undefined;
   isBuyNow?: boolean;
   product: ProductFormData;
 };
@@ -53,7 +51,8 @@ function resolveColorFromName(colorName: string): string {
   if (name.includes("pink")) return "#ec4899";
   if (name.includes("purple")) return "#9333ea";
   if (name.includes("silver")) return "#d1d5db";
-  if (name.includes("gray") || name.includes("grey")) return "#9ca3af";
+  if (name.includes("gray") || name.includes("grey"))
+    return "#9ca3af";
   if (name.includes("gold")) return "#f59e0b";
 
   return "#cccccc";
@@ -71,49 +70,35 @@ export default function ProductVariant({
   from,
   productDetails,
   onCloseModal,
-  onSelectionChange,
   isBuyNow,
   product,
 }: Props) {
   const router = useRouter();
 
-  // catch out all the color exit in the variants
-  const colors = Array.from(
-    new Map(
-      variants.map((v) => [
-        v.attributes.color,
-        { name: v.attributes.color, hex: v.attributes.colorHex },
-      ]),
-    ).values(),
+  const mappedVariants = variants.map((v) => ({
+    ...v,
+    hex: resolveColorFromName(v.color),
+  }));
+
+  const [selectedColor, setSelectedColor] = useState(
+    mappedVariants[0]?.color ?? null,
   );
-
-
-
-  //   catch the available size in the variants
-  const sizes = [...new Set(variants.map((v) => v.attributes.size))];
-
-  // const [selectedColor, setSelectedColor] = useState(colors[0]);
-  // const [selectedSize, setSelectedSize] = useState(sizes[0]);
-
-  const [selectedColor, setSelectedColor] = useState(colors[0] ?? null);
-  const [selectedSize, setSelectedSize] = useState(sizes[0] ?? "");
-
-  // const productSize = selectedSize.split(",");
-  const productSize = selectedSize ? selectedSize.split(",") : [];
-
-  // const [selectedProductSize, setSelectedProductSize] = useState(
-  //   productSize[0],
-  // );
 
   const [selectedProductSize, setSelectedProductSize] = useState(
-    productSize[0] ?? "",
+    mappedVariants[0].sizes[0]?.size ?? "",
   );
+
+  const sizesForSelectedColor =
+    mappedVariants.find(
+      (v) => normalize(v.color) === normalize(selectedColor),
+    )?.sizes || [];
 
   const [quantity, setQuantity] = useState(1);
 
   //   increase or decrease the quantity of product
   const handleIncrease = () => setQuantity((prev) => prev + 1);
-  const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const handleDecrease = () =>
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
     if (!selectedVariant) {
@@ -127,7 +112,9 @@ export default function ProductVariant({
       selectedColor,
       selectedVariant,
       sku,
-      productPrice: productDetails.productPrice,
+      productPrice: selectedVariant.price
+        ? selectedVariant.price
+        : productDetails.productPrice,
       slug: productDetails.slug,
       title: productDetails.title,
       thumbnail: productDetails.thumbnail,
@@ -158,7 +145,9 @@ export default function ProductVariant({
       selectedColor,
       selectedVariant,
       sku,
-      productPrice: productDetails.productPrice,
+      productPrice: selectedVariant.price
+        ? selectedVariant.price
+        : productDetails.productPrice,
       slug: productDetails.slug,
       title: productDetails.title,
       thumbnail: productDetails.thumbnail,
@@ -189,20 +178,21 @@ export default function ProductVariant({
   }
 
   //   whole color change and depend on that change the sku and availability
-  const handleColorChange = (colorObj: {
+  /* const handleColorChange = (colorObj: {
     name: string;
     hex: string | undefined;
   }) => {
     setSelectedColor(colorObj);
 
     const firstAvailableVariantForColor = variants.find(
-      (v) => normalize(v.attributes.color) === normalize(colorObj.name),
+      (v) =>
+        normalize(v.color) === normalize(colorObj.name),
     );
 
     if (firstAvailableVariantForColor) {
       setSelectedSize(firstAvailableVariantForColor.attributes.size);
     }
-  };
+  }; */
 
   //   variant selected fun
   // const selectedVariant = variants.find(
@@ -214,44 +204,53 @@ export default function ProductVariant({
   const selectedVariant =
     variants.length === 0
       ? null
-      : variants.find(
-          (v) =>
-            normalize(v.attributes.color) ===
-              normalize(selectedColor?.name || "") &&
-            normalize(v.attributes.size) === normalize(selectedSize),
-        );
+      : variants
+            .find(
+              (v) =>
+                normalize(v.color) === normalize(selectedColor || ""),
+            )
+            ?.sizes.find(
+              (size) =>
+                size.size.toLowerCase() ===
+                selectedProductSize.toLowerCase(),
+            )
+        ? {
+            ...variants
+              .find(
+                (v) =>
+                  normalize(v.color) ===
+                  normalize(selectedColor || ""),
+              )
+              ?.sizes.find(
+                (size) =>
+                  size.size.toLowerCase() ===
+                  selectedProductSize.toLowerCase(),
+              ),
+            price:
+              variants.find(
+                (v) =>
+                  normalize(v.color) ===
+                  normalize(selectedColor || ""),
+              )?.price || null,
+          }
+        : null;
 
   const hasVariants = variants.length > 0;
 
   //   condition for display the stock
-  // const availabilityText = selectedVariant
-  //   ? selectedVariant.stock < 5
-  //     ? "Stock almost finished"
-  //     : "In Stock"
-  //   : "Unavailable";
 
   const availabilityText = !hasVariants
     ? "No variant available"
-    : selectedVariant
-      ? selectedVariant.stock < 5
+    : selectedVariant &&
+        selectedVariant.stock !== undefined &&
+        selectedVariant.stock !== null
+      ? selectedVariant!.stock < 5
         ? "Stock almost finished"
         : "In Stock"
       : "Unavailable";
 
   // check the sku is exit or not
   const sku = selectedVariant?.sku ?? "N/A";
-
-  useEffect(() => {
-    if (!selectedVariant || onSelectionChange === undefined) return;
-
-    onSelectionChange({
-      selectedProductSize,
-      quantity,
-      selectedColor,
-      selectedVariant,
-      sku,
-    });
-  }, [selectedProductSize, quantity, selectedColor, selectedVariant]);
 
   //   main components
   return (
@@ -282,7 +281,8 @@ export default function ProductVariant({
         <h2>
           {selectedVariant && (
             <span className="ml-3 text-gray-500">
-              <strong>Code:</strong> <span className="font-medium">{sku}</span>
+              <strong>Code:</strong>{" "}
+              <span className="font-medium">{sku}</span>
             </span>
           )}
         </h2>
@@ -291,20 +291,21 @@ export default function ProductVariant({
       {/* COLOR */}
       <div className="rounded-lg bg-white border border-gray-200 p-4">
         <p className="mb-3 text-sm font-medium">
-          Color: <span className="font-semibold">{selectedColor?.name}</span>
+          Color:{" "}
+          <span className="font-semibold">{selectedColor}</span>
         </p>
 
         <div className="flex flex-wrap gap-3">
-          {colors.map((color) => {
-            const bgColor = resolveColor(color?.name, color?.hex);
-
+          {mappedVariants.map((variant) => {
+            const bgColor = resolveColor(variant.color, variant.hex);
             return (
               <button
-                key={color.name}
-                onClick={() => handleColorChange(color)}
+                key={variant.color}
+                onClick={() => setSelectedColor(variant.color)}
                 className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition
                   ${
-                    selectedColor.name === color.name
+                    normalize(selectedColor) ===
+                    normalize(variant.color)
                       ? "border-primary ring-1 ring-primary"
                       : "border-gray-300"
                   }`}
@@ -313,7 +314,8 @@ export default function ProductVariant({
                   className="h-4 w-4 rounded-full border"
                   style={{ backgroundColor: bgColor }}
                 />
-                {color.name}
+
+                {variant.color}
               </button>
             );
           })}
@@ -324,22 +326,24 @@ export default function ProductVariant({
       <div>
         <p className="mb-2 text-sm font-medium">
           Size:{" "}
-          <span className="font-semibold">{selectedSize.toUpperCase()}</span>
+          <span className="font-semibold">
+            {selectedProductSize.toUpperCase()}
+          </span>
         </p>
 
         <div className="flex flex-wrap gap-2">
-          {productSize.map((size) => (
+          {sizesForSelectedColor.map((size) => (
             <button
-              key={size}
-              onClick={() => setSelectedProductSize(size)}
+              key={size.size}
+              onClick={() => setSelectedProductSize(size.size)}
               className={`rounded-md border px-4 py-2 text-sm capitalize transition
                 ${
-                  selectedProductSize === size
+                  selectedProductSize === size.size
                     ? "border-black bg-black text-white"
                     : "border-gray-300"
                 }`}
             >
-              {size}
+              {size.size}
             </button>
           ))}
         </div>
@@ -375,7 +379,7 @@ export default function ProductVariant({
               onClick={() => handleAddToCart()}
               className="flex items-center gap-2 px-4 py-2 border text-primary border-primary rounded-lg hover:cursor-pointer hover:bg-primary hover:text-white! font-medium"
             >
-              <ShoppingCart size={18} /> Add to Cart
+              <ShoppingCart size={18} /> কার্টে এড করুন
             </button>
 
             {/* WhatsApp */}
@@ -421,12 +425,6 @@ export default function ProductVariant({
               কার্টে এড করুন
             </button>
           )}
-          {/* <button
-            onClick={handleAddToCart}
-            className="flex-1 bg-[#269ED9] text-white py-2 rounded-lg text-sm hover:bg-[#1d82b5]"
-          >
-            Add to card
-          </button> */}
         </div>
       )}
     </div>
