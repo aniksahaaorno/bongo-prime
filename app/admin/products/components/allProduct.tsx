@@ -25,11 +25,11 @@ interface VariantSize {
   size: string;
   stock: number;
   sku: string;
-  price: string;
 }
 
 interface Variant {
   color: string;
+  price: string;
   sizes: VariantSize[];
 }
 
@@ -179,10 +179,10 @@ const EditModal: React.FC<EditModalProps> = ({
     setVariants((prev) => {
       const updated = [...prev];
 
+      // ✅ COLOR CHANGE
       if (field === "color") {
         updated[variantIndex].color = value;
 
-        // regenerate all size SKUs when color changes
         updated[variantIndex].sizes = updated[variantIndex].sizes.map(
           (sizeObj: any) => ({
             ...sizeObj,
@@ -191,13 +191,18 @@ const EditModal: React.FC<EditModalProps> = ({
         );
       }
 
+      // ✅ VARIANT PRICE CHANGE (moved outside)
+      if (field === "price" && sizeIndex === null) {
+        updated[variantIndex].price = value;
+      }
+
+      // ✅ SIZE LEVEL CHANGES
       if (sizeIndex !== null) {
         const sizeObj = updated[variantIndex].sizes[sizeIndex];
 
         if (field === "size") {
           sizeObj.size = value;
 
-          // auto generate SKU when size changes
           sizeObj.sku = generateSKU(
             watch("title"),
             updated[variantIndex].color,
@@ -207,9 +212,6 @@ const EditModal: React.FC<EditModalProps> = ({
 
         if (field === "stock") sizeObj.stock = Number(value);
 
-        if (field === "price") sizeObj.price = value;
-
-        // allow manual override
         if (field === "sku") sizeObj.sku = value;
       }
 
@@ -252,12 +254,12 @@ const EditModal: React.FC<EditModalProps> = ({
       ...prev,
       {
         color: "",
+        price: "", // ✅ added here
         sizes: [
           {
             size: "",
             stock: 0,
             sku: "",
-            price: "",
           },
         ],
       },
@@ -276,7 +278,6 @@ const EditModal: React.FC<EditModalProps> = ({
                   size: "",
                   stock: 0,
                   sku: "",
-                  price: "",
                 },
               ],
             }
@@ -572,6 +573,26 @@ const EditModal: React.FC<EditModalProps> = ({
                     />
                   </div>
 
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Variant Price
+                    </label>
+                    <input
+                      type="text"
+                      value={variant.price}
+                      onChange={(e) =>
+                        handleVariantChange(
+                          variantIndex,
+                          null,
+                          "price",
+                          e.target.value,
+                        )
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                      placeholder="Variant price"
+                    />
+                  </div>
+
                   {variant.sizes.map(
                     (size: any, sizeIndex: number) => (
                       <div
@@ -637,7 +658,7 @@ const EditModal: React.FC<EditModalProps> = ({
                           />
                         </div>
 
-                        <div>
+                        {/* <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
                             Price
                           </label>
@@ -656,7 +677,7 @@ const EditModal: React.FC<EditModalProps> = ({
                             min="0"
                             placeholder="0"
                           />
-                        </div>
+                        </div> */}
                         <div>
                           <button
                             type="button"
