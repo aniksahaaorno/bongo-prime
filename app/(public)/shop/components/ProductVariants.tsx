@@ -119,7 +119,13 @@ export default function ProductVariant({
       title: productDetails.title,
       thumbnail: productDetails.thumbnail,
     };
-    addToCart(cartItem);
+
+    if (selectedVariant.stock !== 0) {
+      addToCart(cartItem);
+    } else {
+      alert("Selected size is out of stock");
+      return;
+    }
 
     fbEvent("AddToCart", {
       content_ids: [cartItem.sku || cartItem.slug],
@@ -152,7 +158,13 @@ export default function ProductVariant({
       title: productDetails.title,
       thumbnail: productDetails.thumbnail,
     };
-    addToCart(cartItem);
+
+    if (selectedVariant.stock !== 0) {
+      addToCart(cartItem);
+    } else {
+      alert("Selected size is out of stock");
+      return;
+    }
 
     fbEvent("InitiateCheckout", {
       content_ids: [cartItem.sku || cartItem.slug],
@@ -334,13 +346,16 @@ export default function ProductVariant({
         <div className="flex flex-wrap gap-2">
           {sizesForSelectedColor.map((size) => (
             <button
+              disabled={size.stock === 0}
               key={size.size}
               onClick={() => setSelectedProductSize(size.size)}
               className={`rounded-md border px-4 py-2 text-sm capitalize transition
                 ${
-                  selectedProductSize === size.size
-                    ? "border-black bg-black text-white"
-                    : "border-gray-300"
+                  size.stock === 0
+                    ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-70 line-through"
+                    : selectedProductSize === size.size
+                      ? "border-black bg-black text-white"
+                      : "border-gray-300 hover:border-black hover:text-black"
                 }`}
             >
               {size.size}

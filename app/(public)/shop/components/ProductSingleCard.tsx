@@ -67,6 +67,7 @@ export const SingleProductCard = ({ product }: { product: any }) => {
   const hasDiscount = parseInt(product.discount.value) > 0;
 
   const handleAddToCart = () => {
+    setIsBuyNow(false);
     setIsCartModalOpen(true);
   };
 
@@ -198,20 +199,6 @@ export const SingleProductCard = ({ product }: { product: any }) => {
             {product.title}
           </Link>
         </h3>
-
-        {/* Description - shows on hover */}
-        {/* <div
-          className="overflow-hidden transition-all duration-500 ease-in-out"
-          style={{
-            maxHeight: "100px",
-            opacity: 1,
-            marginBottom: "12px",
-          }}
-        >
-          <p className="text-base text-gray-500 line-clamp-2">
-            {product.description.slice(0, 80)}...
-          </p>
-        </div> */}
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
