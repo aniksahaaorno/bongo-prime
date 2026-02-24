@@ -1,17 +1,15 @@
-import { AllProduct } from '@/lib/products';
-import React from 'react'
-import ProductTable from '../components/allProduct';
+import { AllProduct } from "@/lib/products";
+import React from "react";
+import ProductTable from "../components/allProduct";
 
-const AllProductShow =async () => {
-
+const AllProductShow = async () => {
   const res = await AllProduct();
-    const products = res.data;
+  const products = res.data;
 
-    const productDescription = {
-      title: "Products",
-      subTitle: "Manage your product inventory",
-    };
-
+  const productDescription = {
+    title: "Products",
+    subTitle: "Manage your product inventory",
+  };
 
   return (
     <div>
@@ -21,6 +19,6 @@ const AllProductShow =async () => {
       />
     </div>
   );
-}
+};
 
 export default AllProductShow;

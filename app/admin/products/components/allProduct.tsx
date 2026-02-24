@@ -8,7 +8,7 @@ import { MdPublishedWithChanges } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
-import Link from 'next/link';
+import Link from "next/link";
 
 // ============ TYPE DEFINITIONS ============
 interface Discount {
@@ -21,15 +21,16 @@ interface SEO {
   metaDescription: string;
 }
 
-interface Variant {
-  attributes: {
-    color?: string;
-    size?: string;
-    [key: string]: string | undefined;
-  };
-  sku: string;
+interface VariantSize {
+  size: string;
   stock: number;
+  sku: string;
   price: string;
+}
+
+interface Variant {
+  color: string;
+  sizes: VariantSize[];
 }
 
 interface Product {
@@ -147,6 +148,8 @@ const EditModal: React.FC<EditModalProps> = ({
     product?.variants || [],
   );
 
+  console.log(variants);
+
   React.useEffect(() => {
     if (product) {
       reset({
@@ -167,40 +170,47 @@ const EditModal: React.FC<EditModalProps> = ({
     }
   }, [product, reset]);
 
-  // Auto generate slug
-
   const handleVariantChange = (
-    index: number,
-    field: "color" | "size" | "sku" | "stock" | "price",
+    variantIndex: number,
+    sizeIndex: number | null,
+    field: "color" | "size" | "stock" | "sku" | "price",
     value: string,
   ) => {
     setVariants((prev) => {
       const updated = [...prev];
 
-      const v = updated[index];
+      if (field === "color") {
+        updated[variantIndex].color = value;
 
-      if (field === "color" || field === "size") {
-        v.attributes = {
-          ...v.attributes,
-          [field]: value,
-        };
-
-        const color = v.attributes.color || "";
-        const size = v.attributes.size || "";
-
-        v.sku = generateSKU(product!.title, color, size);
+        // regenerate all size SKUs when color changes
+        updated[variantIndex].sizes = updated[variantIndex].sizes.map(
+          (sizeObj: any) => ({
+            ...sizeObj,
+            sku: generateSKU(watch("title"), value, sizeObj.size),
+          }),
+        );
       }
 
-      if (field === "stock") {
-        v.stock = Number(value);
-      }
+      if (sizeIndex !== null) {
+        const sizeObj = updated[variantIndex].sizes[sizeIndex];
 
-      if (field === "sku") {
-        v.sku = value;
-      }
+        if (field === "size") {
+          sizeObj.size = value;
 
-      if (field === "price") {
-        v.price = value;
+          // auto generate SKU when size changes
+          sizeObj.sku = generateSKU(
+            watch("title"),
+            updated[variantIndex].color,
+            value,
+          );
+        }
+
+        if (field === "stock") sizeObj.stock = Number(value);
+
+        if (field === "price") sizeObj.price = value;
+
+        // allow manual override
+        if (field === "sku") sizeObj.sku = value;
       }
 
       return updated;
@@ -215,31 +225,77 @@ const EditModal: React.FC<EditModalProps> = ({
       .replace(/\s+/g, "-");
   };
 
+  const generateSKU = (
+    productTitle: string,
+    color?: string,
+    size?: string,
+  ) => {
+    const productCode = productTitle
+      ? productTitle.substring(0, 3).toUpperCase()
+      : "PRD";
+
+    const colorCode = color
+      ? color.substring(0, 3).toUpperCase()
+      : "CLR";
+
+    const sizeCode = size
+      ? size.substring(0, 3).toUpperCase()
+      : "SIZ";
+
+    const random = Math.floor(100 + Math.random() * 900);
+
+    return `${productCode}-${colorCode}-${sizeCode}-${random}`;
+  };
+
   const addVariant = () => {
     setVariants((prev) => [
       ...prev,
       {
-        attributes: { color: "", size: "" },
-        sku: generateSKU(product!.title, "", ""),
-        stock: 0,
-        price: product.basePrice,
+        color: "",
+        sizes: [
+          {
+            size: "",
+            stock: 0,
+            sku: "",
+            price: "",
+          },
+        ],
       },
     ]);
   };
 
-  const generateSKU = (
-    productTitle: string,
-    color: string,
-    size: string,
-  ) => {
-    const productCode = productTitle.substring(0, 3).toUpperCase();
-    const colorCode = color
-      ? color.substring(0, 3).toUpperCase()
-      : "NA";
-    const sizeCode = size ? size.substring(0, 3).toUpperCase() : "ST";
-    const random = Math.floor(100 + Math.random() * 900);
+  const addSize = (variantIndex: number) => {
+    setVariants((prev) =>
+      prev.map((variant, index) =>
+        index === variantIndex
+          ? {
+              ...variant,
+              sizes: [
+                ...variant.sizes,
+                {
+                  size: "",
+                  stock: 0,
+                  sku: "",
+                  price: "",
+                },
+              ],
+            }
+          : variant,
+      ),
+    );
+  };
 
-    return `${productCode}-${colorCode}-${sizeCode}-${random}`;
+  const removeSize = (variantIndex: number, sizeIndex: number) => {
+    setVariants((prev) =>
+      prev.map((variant, index) =>
+        index === variantIndex
+          ? {
+              ...variant,
+              sizes: variant.sizes.filter((_, i) => i !== sizeIndex),
+            }
+          : variant,
+      ),
+    );
   };
 
   const removeVariant = (index: number) => {
@@ -314,13 +370,6 @@ const EditModal: React.FC<EditModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Slug
             </label>
-            {/* <input
-              type="text"
-              {...register("slug", { required: "Slug is required" })}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                errors.slug ? "border-red-500" : "border-gray-300"
-              }`}
-            /> */}
             <input
               type="text"
               readOnly
@@ -379,68 +428,26 @@ const EditModal: React.FC<EditModalProps> = ({
                 </p>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Stock Quantity
-              </label>
-              <input
-                type="text"
-                {...register("stockQuantity", {
-                  required: "Stock Quantity is required",
-                })}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  errors.stockQuantity
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }`}
-              />
-              {errors.stockQuantity && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.stockQuantity.message}
-                </p>
-              )}
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                SKU
-              </label>
-              <input
-                type="text"
-                {...register("sku", { required: "SKU is required" })}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  errors.sku ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.sku && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.sku.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category
-              </label>
-              <input
-                type="text"
-                {...register("category", {
-                  required: "Category is required",
-                })}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  errors.category
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }`}
-              />
-              {errors.category && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.category.message}
-                </p>
-              )}
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Category
+            </label>
+            <input
+              type="text"
+              {...register("category", {
+                required: "Category is required",
+              })}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
+                errors.category ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.category && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.category.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -528,118 +535,151 @@ const EditModal: React.FC<EditModalProps> = ({
             <h3 className="text-lg font-semibold mb-4">Variants</h3>
 
             <div className="space-y-4">
-              {variants.map((variant: any, index: number) => (
+              {variants.map((variant: any, variantIndex: number) => (
                 <div
-                  key={index}
+                  key={variantIndex}
                   className="p-4 border rounded-lg bg-gray-50 shadow-sm hover:shadow transition-shadow"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <h4 className="font-medium text-gray-700">
-                      Variant #{index + 1}
+                      Variant #{variantIndex + 1}
                     </h4>
                     <button
                       type="button"
-                      onClick={() => removeVariant(index)}
+                      onClick={() => removeVariant(variantIndex)}
                       className="px-3 py-1 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-md transition-colors"
                     >
                       Remove
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Color
-                      </label>
-                      <input
-                        value={variant.attributes.color}
-                        onChange={(e) =>
-                          handleVariantChange(
-                            index,
-                            "color",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        placeholder="e.g. Black"
-                      />
-                    </div>
+                  <div className="">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Color
+                    </label>
+                    <input
+                      value={variant.color}
+                      onChange={(e) =>
+                        handleVariantChange(
+                          variantIndex,
+                          null,
+                          "color",
+                          e.target.value,
+                        )
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                      placeholder="e.g. Black"
+                    />
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Size
-                      </label>
-                      <input
-                        value={variant.attributes.size}
-                        onChange={(e) =>
-                          handleVariantChange(
-                            index,
-                            "size",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        placeholder="e.g. M"
-                      />
-                    </div>
+                  {variant.sizes.map(
+                    (size: any, sizeIndex: number) => (
+                      <div
+                        className="mt-4 flex items-center justify-between gap-x-3"
+                        key={sizeIndex}
+                      >
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Size
+                          </label>
+                          <input
+                            value={size.size}
+                            onChange={(e) =>
+                              handleVariantChange(
+                                variantIndex,
+                                sizeIndex,
+                                "size",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            placeholder="e.g. M"
+                          />
+                        </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        SKU
-                      </label>
-                      <input
-                        value={variant.sku}
-                        readOnly
-                        onChange={(e) =>
-                          handleVariantChange(
-                            index,
-                            "sku",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        placeholder="e.g. PROD-BLK-M"
-                      />
-                    </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            SKU
+                          </label>
+                          <input
+                            value={size.sku}
+                            onChange={(e) =>
+                              handleVariantChange(
+                                variantIndex,
+                                sizeIndex,
+                                "sku",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            placeholder="e.g. PROD-BLK-M"
+                          />
+                        </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Stock
-                      </label>
-                      <input
-                        type="number"
-                        value={variant.stock}
-                        onChange={(e) =>
-                          handleVariantChange(
-                            index,
-                            "stock",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        min="0"
-                        placeholder="0"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Price
-                      </label>
-                      <input
-                        type="text"
-                        value={variant.price}
-                        onChange={(e) =>
-                          handleVariantChange(
-                            index,
-                            "price",
-                            e.target.value,
-                          )
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        min="0"
-                        placeholder="0"
-                      />
-                    </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Stock
+                          </label>
+                          <input
+                            type="number"
+                            value={size.stock}
+                            onChange={(e) =>
+                              handleVariantChange(
+                                variantIndex,
+                                sizeIndex,
+                                "stock",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            min="0"
+                            placeholder="0"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Price
+                          </label>
+                          <input
+                            type="text"
+                            value={size.price}
+                            onChange={(e) =>
+                              handleVariantChange(
+                                variantIndex,
+                                sizeIndex,
+                                "price",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            min="0"
+                            placeholder="0"
+                          />
+                        </div>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              removeSize(variantIndex, sizeIndex)
+                            }
+                            className="px-2 py-1 bg-red-100 text-red-600 rounded-md ml-2"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    ),
+                  )}
+
+                  <div className="mt-2">
+                    <button
+                      type="button"
+                      onClick={() => addSize(variantIndex)}
+                      className="px-3 py-1 bg-blue-100 text-blue-600 rounded-md"
+                    >
+                      Add Size
+                    </button>
                   </div>
                 </div>
               ))}
@@ -957,7 +997,10 @@ const ProductTable = ({
                           className="p-2 hover:bg-blue-50 rounded-lg transition-colors text-primary hover:text-primary"
                           title="Generate Landing"
                         >
-                          <Link href={`/${product.slug}/landing`} target="_blank">
+                          <Link
+                            href={`/${product.slug}/landing`}
+                            target="_blank"
+                          >
                             <CornerDownRight size={18} />
                           </Link>
                         </button>
