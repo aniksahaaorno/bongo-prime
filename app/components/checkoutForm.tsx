@@ -18,20 +18,21 @@ import { useRouter } from "next/navigation";
 import { fraudRoles } from "./fackOuterCheckLayer";
 import { makePayment } from "@/lib/makePayment";
 
-interface CheckoutProduct {
-  productPrice: number;
-  quantity: number;
-  selectedColor: { name: string };
+export interface CartItem {
   selectedProductSize: string;
+  quantity: number;
+  selectedColor: string;
   selectedVariant: {
-    attributes: { color: string; size: string };
-    sku: string;
+    size: string;
     stock: number;
-  };
+    sku: string;
+    price: number | null; // because it can be null
+  } | null;
   sku: string;
+  productPrice: number;
   slug: string;
-  thumbnail: string;
   title: string;
+  thumbnail: string;
 }
 
 interface IFrodState {
@@ -46,8 +47,10 @@ interface IFrodState {
 }
 
 export default function CheckoutForm() {
-  const [cartItems, setCartItems] = useState<CheckoutProduct[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const router = useRouter();
+
+  console.log(cartItems);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -146,7 +149,9 @@ export default function CheckoutForm() {
   };
 
   const subtotal = cartItems.reduce((total, item) => {
-    return total + item.productPrice * item.quantity;
+    const price = item.selectedVariant?.price ?? item.productPrice;
+
+    return total + price * item.quantity;
   }, 0);
 
   const deliveryCharge = deliveryMethod === "inside" ? 80 : 100;
@@ -217,6 +222,8 @@ export default function CheckoutForm() {
       return;
     }
 
+    console.log(cartItems);
+
     const orderData = {
       customerInfo: {
         firstName: formData.firstName,
@@ -237,6 +244,8 @@ export default function CheckoutForm() {
         price: item.productPrice,
         quantity: item.quantity,
         variant: item.selectedVariant,
+        color: item.selectedColor,
+        size: item.selectedProductSize,
       })),
       subtotal: subtotal,
       deliveryCharge: deliveryCharge,
@@ -248,6 +257,8 @@ export default function CheckoutForm() {
       paymentStatus: "pending",
       sourceUrl: window.location.href,
     };
+
+    console.log(orderData);
 
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -275,16 +286,15 @@ export default function CheckoutForm() {
 
         clearCart();
 
-        if(paymentMethod === "cash") {
+        if (paymentMethod === "cash") {
           router.push("/");
-          return; 
+          return;
         }
 
         makePayment({
           orderId: response.data.orderId,
           amount: grandTotal,
         });
-
 
         // if (paymentMethod === "sslcommerz" && response.data.paymentUrl) {
         //   window.location.replace(response.data.paymentUrl);
@@ -318,9 +328,9 @@ export default function CheckoutForm() {
       <form onSubmit={handleSubmit}>
         <div className="mx-auto max-w-7xl">
           {/* Main Grid - Responsive */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             {/* Left Column - Form */}
-            <div className="space-y-6 lg:col-span-2">
+            <div className="space-y-6 lg:col-span-3">
               {/* Personal Information */}
               <div className="rounded-lg bg-white p-6 shadow-sm">
                 <h2 className="mb-4 text-lg font-semibold text-gray-900">
@@ -430,7 +440,7 @@ export default function CheckoutForm() {
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <label className="mb-2 block text-sm font-medium text-gray-700">
-                        সিটি 
+                        সিটি
                       </label>
                       <Input
                         type="text"
@@ -458,8 +468,7 @@ export default function CheckoutForm() {
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      হাউজ {" "}
-                      <span className="text-red-500">*</span>
+                      হাউজ <span className="text-red-500">*</span>
                     </label>
                     <Input
                       type="text"
@@ -481,7 +490,7 @@ export default function CheckoutForm() {
                 <div className="space-y-4">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      এপ্লাই কুপন/প্রোমো 
+                      এপ্লাই কুপন/প্রোমো
                     </label>
                     <Input
                       type="text"
@@ -504,7 +513,7 @@ export default function CheckoutForm() {
               {/* Delivery Method */}
               <div className="rounded-lg bg-white p-6 shadow-sm">
                 <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                      ডেলিভারি মেথড
+                  ডেলিভারি মেথড
                 </h2>
                 <div className="space-y-3">
                   <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 hover:bg-gray-50">
@@ -522,9 +531,7 @@ export default function CheckoutForm() {
                       <p className="font-medium text-gray-900">
                         ঢাকার ভিতরে
                       </p>
-                      <p className="text-xs text-gray-500">
-                        ২-৩ দিন
-                      </p>
+                      <p className="text-xs text-gray-500">২-৩ দিন</p>
                     </div>
                     <span className="font-semibold text-gray-900">
                       ৳80.00
@@ -544,11 +551,9 @@ export default function CheckoutForm() {
                     />
                     <div className="flex-1">
                       <p className="font-medium text-gray-900">
-                        ঢাকার বাহিরে 
+                        ঢাকার বাহিরে
                       </p>
-                      <p className="text-xs text-gray-500">
-                        ৩-৪ দিন
-                      </p>
+                      <p className="text-xs text-gray-500">৩-৪ দিন</p>
                     </div>
                     <span className="font-semibold text-gray-900">
                       ৳130.00
@@ -747,7 +752,9 @@ export default function CheckoutForm() {
                   </div>
 
                   <div className="flex justify-between pt-4 text-base font-bold">
-                    <span className="text-gray-900">গ্রান্ড টোটাল</span>
+                    <span className="text-gray-900">
+                      গ্রান্ড টোটাল
+                    </span>
                     <span className="text-gray-900">
                       ৳ {grandTotal.toLocaleString("en-BD")}
                     </span>
