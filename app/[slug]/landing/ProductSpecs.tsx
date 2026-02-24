@@ -2,18 +2,22 @@
 
 import { motion } from "framer-motion";
 
-export interface ProductVariant {
-  attributes: {
-    color: string;
-    size: string;
-  };
-  sku: string;
+/* ================= TYPES ================= */
+
+export interface ProductSize {
+  size: string;
   stock: number;
+  sku: string;
+}
+
+export interface ProductVariant {
+  color: string;
   price?: string;
+  sizes: ProductSize[];
 }
 
 export interface ProductDiscount {
-  type: "percentage" | "fixed";
+  type: "percentage" | "flat";
   value: string;
 }
 
@@ -25,42 +29,50 @@ export interface Product {
   shortDescription: string;
   basePrice: string;
   discount: ProductDiscount;
-  sku: string;
-  stockQuantity: string;
   stockStatus: "in-stock" | "out-of-stock" | "low-stock";
-  categoryId?: string;
-  subCategoryId?: string | null;
   category: string;
   subCategory?: string;
   tags: string[];
   thumbnail: string;
   gallery: string[];
   variants: ProductVariant[];
-  seo: {
-    metaTitle: string;
-    metaDescription: string;
-  };
   purchase?: string;
-}
-
-
-interface ProductHeroProps {
-  product: Product;
 }
 
 interface ProductSpecsProps {
   product: Product;
 }
 
+/* ================= COMPONENT ================= */
+
 const ProductSpecs = ({ product }: ProductSpecsProps) => {
-  // Build specs dynamically from product data
+  /* ================= DERIVED DATA ================= */
+
+  const availableColors = product.variants.map((v) => v.color);
+
+  const availableSizes = [
+    ...new Set(
+      product.variants.flatMap((v) =>
+        v.sizes.map((s) => s.size)
+      )
+    ),
+  ];
+
+  const totalStock = product.variants.reduce((total, variant) => {
+    return (
+      total +
+      variant.sizes.reduce((s, size) => s + size.stock, 0)
+    );
+  }, 0);
+
   const specs = [
-    { label: "SKU", value: product.sku },
     { label: "Category", value: product.category },
-    ...(product.subCategory ? [{ label: "Sub Category", value: product.subCategory }] : []),
-    { label: "Available Colors", value: [...new Set(product.variants.map((v) => v.attributes.color))].join(", ") },
-    { label: "Available Sizes", value: [...new Set(product.variants.flatMap((v) => v.attributes.size.split(",")))].map(s => s.trim()).join(", ") },
-    { label: "Total Stock", value: product.stockQuantity + " units" },
+    ...(product.subCategory
+      ? [{ label: "Sub Category", value: product.subCategory }]
+      : []),
+    { label: "Available Colors", value: availableColors.join(", ") },
+    { label: "Available Sizes", value: availableSizes.join(", ") },
+    { label: "Total Stock", value: `${totalStock} units` },
     { label: "Tags", value: product.tags.join(", ") },
   ];
 
@@ -78,8 +90,8 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Specs Table */}
-            <div className="space-y-0 border border-border rounded-xl overflow-hidden">
+            {/* ================= SPECS TABLE ================= */}
+            <div className="border border-border rounded-xl overflow-hidden">
               {specs.map((spec, index) => (
                 <motion.div
                   key={spec.label}
@@ -88,10 +100,14 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                   className={`flex justify-between items-center p-4 ${
-                    index !== specs.length - 1 ? "border-b border-border" : ""
-                  } hover:bg-secondary/50 transition-colors duration-300`}
+                    index !== specs.length - 1
+                      ? "border-b border-border"
+                      : ""
+                  } hover:bg-secondary/50 transition-colors`}
                 >
-                  <span className="text-muted-foreground">{spec.label}</span>
+                  <span className="text-muted-foreground">
+                    {spec.label}
+                  </span>
                   <span className="font-medium text-foreground text-right max-w-[60%]">
                     {spec.value}
                   </span>
@@ -99,45 +115,80 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
               ))}
             </div>
 
-            {/* Variants Summary */}
-            <div className="space-y-4">
-              <h3 className="font-display text-xl font-semibold">Available Variants</h3>
-              <div className="space-y-3">
-                {product.variants.map((variant, index) => (
-                  <motion.div
-                    key={variant.sku}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    className="p-4 rounded-xl border border-border bg-secondary/30"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="font-medium text-foreground">
-                        {variant.attributes.color}
-                      </span>
-                      <span
-                        className={`text-sm px-2 py-0.5 rounded-full ${
-                          variant.stock > 10
-                            ? "bg-green-100 text-green-700"
-                            : variant.stock > 0
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
-                        {variant.stock > 0 ? `${variant.stock} in stock` : "Out of stock"}
-                      </span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Sizes: {variant.attributes.size}
-                    </div>
-                    {variant.price && (
-                      <div className="text-sm text-gold mt-1">
-                        Special Price: ৳{parseFloat(variant.price).toLocaleString()}
+            {/* ================= VARIANTS SUMMARY ================= */}
+            <div>
+              <h3 className="font-display text-xl font-semibold mb-4">
+                Available Variants
+              </h3>
+
+              <div className="space-y-4">
+                {product.variants.map((variant, index) => {
+                  const variantStock = variant.sizes.reduce(
+                    (total, size) => total + size.stock,
+                    0
+                  );
+
+                  return (
+                    <motion.div
+                      key={variant.color}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.4,
+                        delay: index * 0.1,
+                      }}
+                      className="p-4 rounded-xl border border-border bg-secondary/30"
+                    >
+                      {/* Color + Stock */}
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="font-medium text-foreground">
+                          {variant.color}
+                        </span>
+
+                        <span
+                          className={`text-sm px-2 py-0.5 rounded-full ${
+                            variantStock > 10
+                              ? "bg-green-100 text-green-700"
+                              : variantStock > 0
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {variantStock > 0
+                            ? `${variantStock} in stock`
+                            : "Out of stock"}
+                        </span>
                       </div>
-                    )}
-                  </motion.div>
-                ))}
+
+                      {/* Sizes */}
+                      <div className="flex flex-wrap gap-2 text-sm">
+                        {variant.sizes.map((size) => (
+                          <span
+                            key={size.sku}
+                            className={`px-3 py-1 rounded-full border ${
+                              size.stock > 0
+                                ? "border-border"
+                                : "border-destructive text-destructive"
+                            }`}
+                          >
+                            {size.size} ({size.stock})
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Optional Variant Price */}
+                      {variant.price && (
+                        <div className="text-sm text-gold mt-3">
+                          Special Price: ৳
+                          {parseFloat(
+                            variant.price
+                          ).toLocaleString()}
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
           </div>

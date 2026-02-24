@@ -25,8 +25,6 @@ export default async function ProductLanding({
       <ProductHero product={product} />
       <ProductFeatures />
       <ProductSpecs product={product} />
-
-      <Footer brandName="FASHION HOUSE" />
     </main>
   );
 }
