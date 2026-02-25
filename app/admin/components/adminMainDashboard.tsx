@@ -78,8 +78,8 @@ export default function Dashboard({ result }: any) {
           />
           <MetricCard
             title="Total Revenue"
-            value={`$${(analytics?.totalGrandTotal || 0).toLocaleString(
-              "en-US",
+            value={`৳${(analytics?.totalGrandTotal || 0).toLocaleString(
+              "bn-BD",
               { minimumFractionDigits: 2 }
             )}`}
             description="Total sales amount"
@@ -87,8 +87,8 @@ export default function Dashboard({ result }: any) {
           />
           <MetricCard
             title="Total Purchase"
-            value={`$${(data?.totalOverallPurchase || 0).toLocaleString(
-              "en-US",
+            value={`৳${(data?.totalOverallPurchase || 0).toLocaleString(
+              "bn-BD",
               { minimumFractionDigits: 2 }
             )}`}
             description="Total purchase amount"
@@ -96,17 +96,20 @@ export default function Dashboard({ result }: any) {
           />
           <MetricCard
             title="Paid Orders"
-            value={analytics?.totalPaidOrders || 0}
-            description={`$${(analytics?.totalPaidAmount || 0).toLocaleString(
-              "en-US",
+            value={`৳${(analytics?.totalPaidOrders || 0).toLocaleString(
+              "bn-BD",
+              { minimumFractionDigits: 2 }
+            )}`}
+            description={`৳${(analytics?.totalPaidAmount || 0).toLocaleString(
+              "bn-BD",
               { minimumFractionDigits: 2 }
             )}`}
             trend={null}
           />
           <MetricCard
             title="Due Amount"
-            value={`$${(analytics?.totalDueAmount || 0).toLocaleString(
-              "en-US",
+            value={`৳${(analytics?.totalDueAmount || 0).toLocaleString(
+              "bn-BD",
               { minimumFractionDigits: 2 }
             )}`}
             description={`${analytics?.totalDueOrders || 0} pending orders`}

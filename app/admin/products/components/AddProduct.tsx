@@ -424,7 +424,7 @@ export default function AddProductForm({ allCategory }: any) {
     pricing: ["basePrice"],
     inventory: ["sku", "stockQuantity", "stockStatus"],
     media: ["thumbnail"],
-    variants: [], // optional
+    variants: ["variants"], // optional
     seo: [], // submit time এ handle হবে
   };
 
@@ -448,6 +448,12 @@ export default function AddProductForm({ allCategory }: any) {
           previewImages.thumbnail !== null
         );
       }
+
+      // VARIANTS check (NEW)
+      if (field === "variants") {
+        return formData.variants.length > 0;
+      }
+
       // normal string check
       const value = formData[field as keyof ProductFormData];
       return value !== "" && value !== null;
@@ -876,7 +882,7 @@ export default function AddProductForm({ allCategory }: any) {
                   name="videoLink"
                   value={formData.videoLink}
                   required
-                  onChange={handleVariantChange}
+                  onChange={handleInputChange}
                   placeholder="Add your youtube product video link"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
@@ -1104,6 +1110,14 @@ export default function AddProductForm({ allCategory }: any) {
                   <Plus size={20} />
                   Add New Variant
                 </button>
+              )}
+
+              {/* Validation Message */}
+              {formData.variants.length === 0 && (
+                <div className="mt-4 text-sm text-red-600 font-medium">
+                  ⚠️ Please add at least one variant before
+                  proceeding.
+                </div>
               )}
             </div>
           )}

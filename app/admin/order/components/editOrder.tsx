@@ -10,18 +10,16 @@ import { toast } from "sonner";
 
 // Types
 interface Variant {
-  attributes: {
-    color: string;
-    size: string;
-  };
-  sku: string;
+  size: string;
   stock: number;
+  sku: string;
 }
 
 interface Product {
   productId: string;
   title: string;
   slug: string;
+  sku: string;
   quantity: number;
   price: number;
   subtotal: number;
@@ -75,10 +73,18 @@ interface FormInputs {
   orderNote: string;
 }
 
-const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
+const OrderDetailsPage = ({
+  orderData,
+}: {
+  orderData: OrderData;
+}) => {
   const BASE_URL = process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL;
 
-  const [products, setProducts] = useState<Product[]>(orderData.products);
+  const [products, setProducts] = useState<Product[]>(
+    orderData.products,
+  );
+
+  console.log(products);
   const [searchId, setSearchId] = useState<string>("");
   const { control, handleSubmit } = useForm<FormInputs>({
     defaultValues: {
@@ -121,7 +127,9 @@ const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
 
           if (response.status === 200) {
             setProducts(products.filter((p) => p.productId !== id));
-            toast.success(response.data.message ?? "Deleted successfully");
+            toast.success(
+              response.data.message ?? "Deleted successfully",
+            );
           } else {
             alert("Failed to delete the order. Please try again.");
           }
@@ -143,57 +151,93 @@ const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
 
   const handleProductChange = (
     productId: string,
-    field: keyof Product | "color" | "size",
+    field: "quantity" | "color" | "size" | "price" | "sku",
     value: string | number,
   ): void => {
-    setProducts(
-      products.map((p) => {
-        if (p.productId === productId) {
-          if (field === "quantity") {
-            const qty = parseInt(value as string) || 0;
-            return { ...p, quantity: qty, subtotal: qty * p.price };
-          }
-          if (field === "price") {
-            const pr = parseFloat(value as string) || 0;
-            return { ...p, price: pr, subtotal: p.quantity * pr };
-          }
-          if (field === "color" || field === "size") {
-            return {
-              ...p,
-              variant: {
-                ...p.variant,
-                attributes: {
-                  ...p.variant.attributes,
-                  [field]: value,
-                },
-              },
-            };
-          }
-          return { ...p, [field]: value };
+    setProducts((prev) =>
+      prev.map((p) => {
+        if (p.productId !== productId) return p;
+
+        // Quantity change
+        if (field === "quantity") {
+          const qty = parseInt(value as string) || 0;
+          return {
+            ...p,
+            quantity: qty,
+            subtotal: qty * p.price,
+          };
         }
+
+        // Price change (ROOT LEVEL)
+        if (field === "price") {
+          const pr = parseFloat(value as string) || 0;
+          return {
+            ...p,
+            price: pr,
+            subtotal: p.quantity * pr,
+          };
+        }
+
+        // Color change
+        if (field === "color") {
+          return {
+            ...p,
+            variant: {
+              ...p.variant,
+              color: value as string,
+            },
+          };
+        }
+
+        // Size change
+        if (field === "size") {
+          return {
+            ...p,
+            variant: {
+              ...p.variant,
+              size: value as string,
+            },
+          };
+        }
+
+        // SKU change
+        if (field === "sku") {
+          return {
+            ...p,
+            sku: value as string,
+            variant: {
+              ...p.variant,
+              sku: value as string,
+            },
+          };
+        }
+
         return p;
       }),
     );
   };
 
-  const onSubmit: SubmitHandler<FormInputs> = async (data: FormInputs) => {
-    const updatedOrderData: Partial<OrderData> & Partial<FormInputs> = {
-      ...orderData,
-      ...data,
-      products,
-      customerInfo: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
-        email: data.email,
-      },
-      shippingAddress: {
-        ...orderData.shippingAddress,
-        street: data.street,
-        city: data.city,
-        postalCode: data.postalCode,
-      },
-    };
+  const onSubmit: SubmitHandler<FormInputs> = async (
+    data: FormInputs,
+  ) => {
+    const updatedOrderData: Partial<OrderData> & Partial<FormInputs> =
+      {
+        ...orderData,
+        ...data,
+        products,
+        customerInfo: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          email: data.email,
+        },
+        shippingAddress: {
+          ...orderData.shippingAddress,
+          street: data.street,
+          city: data.city,
+          postalCode: data.postalCode,
+        },
+      };
 
     try {
       const res = await axios.put(
@@ -289,7 +333,9 @@ const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
         {/* Products Table */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">Products</h2>
+            <h2 className="text-xl font-bold text-gray-900">
+              Products
+            </h2>
           </div>
 
           <div className="overflow-x-auto">
@@ -301,9 +347,6 @@ const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                     Size
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                    Color
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                     Quantity
@@ -338,25 +381,11 @@ const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
                     <td className="px-6 py-4">
                       <input
                         type="text"
-                        value={product.variant.attributes.size}
+                        value={product.variant.size}
                         onChange={(e) =>
                           handleProductChange(
                             product.productId,
                             "size",
-                            e.target.value,
-                          )
-                        }
-                        className="w-20 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary"
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <input
-                        type="text"
-                        value={product.variant.attributes.color}
-                        onChange={(e) =>
-                          handleProductChange(
-                            product.productId,
-                            "color",
                             e.target.value,
                           )
                         }
@@ -378,25 +407,31 @@ const OrderDetailsPage = ({ orderData }: { orderData: OrderData }) => {
                       />
                     </td>
                     <td className="px-6 py-4">
-                      <input
-                        type="number"
-                        value={product.price}
-                        onChange={(e) =>
-                          handleProductChange(
-                            product.productId,
-                            "price",
-                            e.target.value,
-                          )
-                        }
-                        className="w-24 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary"
-                      />
+                      <td className="px-6 py-4">
+                        <td className="px-6 py-4">
+                          <input
+                            type="number"
+                            value={product.price}
+                            onChange={(e) =>
+                              handleProductChange(
+                                product.productId,
+                                "price",
+                                e.target.value,
+                              )
+                            }
+                            className="w-24 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary"
+                          />
+                        </td>
+                      </td>
                     </td>
                     <td className="px-6 py-4 font-semibold text-gray-900">
-                      {product.subtotal.toFixed(2)}
+                      {(product.quantity * product.price).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <button
-                        onClick={() => handleDeleteProduct(product.productId)}
+                        onClick={() =>
+                          handleDeleteProduct(product.productId)
+                        }
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                       >
                         <Trash2 className="w-5 h-5" />

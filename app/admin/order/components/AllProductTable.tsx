@@ -109,11 +109,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
     });
   };
 
-
-
-
-
-
   const fullAddress = `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.region}, ${order.shippingAddress.postalCode}`;
 
   return (
@@ -270,7 +265,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                   <div className="text-xs text-gray-600 pt-3 border-t border-gray-200">
                     <p className="font-semibold">
                       Variant:{" "}
-                      {Object.entries(product.variant.attributes)
+                      {Object.entries(product.variant)
                         .map(([k, v]) => `${k}: ${v}`)
                         .join(", ")}
                     </p>
@@ -411,8 +406,6 @@ const AllProductTable = ({
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(
     null,
   );
-
-
 
   const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>(
     [],
@@ -571,7 +564,9 @@ const AllProductTable = ({
                       }
                       onChange={(e) =>
                         setSelectedOrderIds(
-                          e.target.checked ? orders.map((o) => o._id) : [],
+                          e.target.checked
+                            ? orders.map((o) => o._id)
+                            : [],
                         )
                       }
                     />
@@ -624,7 +619,9 @@ const AllProductTable = ({
                       <input
                         type="checkbox"
                         checked={selectedOrderIds.includes(order._id)}
-                        onChange={() => toggleOrderSelection(order._id)}
+                        onChange={() =>
+                          toggleOrderSelection(order._id)
+                        }
                       />
                     </td>
 
@@ -658,7 +655,10 @@ const AllProductTable = ({
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm font-semibold text-gray-900">
-                        {order.products.reduce((sum, p) => sum + p.quantity, 0)}
+                        {order.products.reduce(
+                          (sum, p) => sum + p.quantity,
+                          0,
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -697,7 +697,7 @@ const AllProductTable = ({
                       <div className="flex flex-col gap-1">
                         <Badge
                           className={`text-xs flex justify-center ${getOrderStatusClass(
-                            order.orderStatus ? "TRUE": "FALSE",
+                            order.orderStatus ? "TRUE" : "FALSE",
                           )}`}
                         >
                           {order.isEmailVerified ? "True" : "False"}
@@ -798,7 +798,8 @@ const AllProductTable = ({
               <div className="p-4 md:p-6">
                 <div className="mb-4 pb-4 border-b border-gray-200">
                   <h3 className="text-base font-semibold text-gray-900">
-                    {order.customerInfo.firstName} {order.customerInfo.lastName}
+                    {order.customerInfo.firstName}{" "}
+                    {order.customerInfo.lastName}
                   </h3>
                   <p className="text-xs md:text-sm text-gray-600 mt-1">
                     {order.customerInfo.email}
@@ -849,7 +850,9 @@ const AllProductTable = ({
 
                 <div className="mb-4 pb-4 border-b border-gray-200 space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Total:</span>
+                    <span className="text-sm text-gray-600">
+                      Total:
+                    </span>
                     <span className="text-lg font-semibold text-gray-900">
                       ৳{order.grandTotal?.toFixed(2)}
                     </span>
