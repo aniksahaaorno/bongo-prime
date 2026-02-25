@@ -11,7 +11,7 @@ interface SliderContainer {
   images: string[];
 }
 
-export interface ProductSliderSectionProps {
+export interface  ProductSliderSectionProps {
   mainSlider: SliderContainer;
   sideSliders: SliderContainer[];
 }

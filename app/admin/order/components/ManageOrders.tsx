@@ -50,9 +50,6 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
       );
     }
 
-    
-
-
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();

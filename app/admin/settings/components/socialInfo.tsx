@@ -1,238 +1,6 @@
-// "use client";
-
-// import React, { useState } from "react";
-// import { useForm, useFieldArray } from "react-hook-form";
-// import axios from "axios";
-// import { Plus, Upload } from "lucide-react";
-// import { SOCIAL_OPTIONS } from "./socialOptions";
-// import { UploadeImage } from "@/app/components/uploadeImage";
-// import { toast } from "sonner";
-// import { resumePluginState } from "next/dist/build/build-context";
-
-// type SocialLink = {
-//   platform: string;
-//   url: string;
-// };
-
-// type FormValues = {
-//   logo: FileList;
-//   name: string;
-//   phone: string;
-//   email: string;
-//   address: string;
-//   socials: SocialLink[];
-// };
-
-// const BrandForm = () => {
-//   const {
-//     register,
-//     control,
-//     handleSubmit,
-//     reset,
-//     formState: { errors },
-//   } = useForm<FormValues>({
-//     defaultValues: {
-//       socials: [{ platform: "facebook", url: "" }],
-//     },
-//   });
-
-//   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-//   const [uploading, setUploading] = useState(false);
-
-//   const { fields, append } = useFieldArray({
-//     control,
-//     name: "socials",
-//   });
-
-//   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (!file) return;
-
-//     try {
-//       setUploading(true);
-//       const url = await UploadeImage(file);
-
-//       setLogoPreview(url);
-//       reset();
-//     } catch (err) {
-//     } finally {
-//       setUploading(false);
-//     }
-//   };
-
-//   // 🔹 Submit Handler
-//   const onSubmit = async (data: FormValues) => {
-//     if (!logoPreview) return alert("Please upload a logo");
-//     const payload = {
-//       logo: logoPreview,
-//       name: data.name,
-//       phone: data.phone,
-//       socials: data.socials,
-//       email: data.email,
-//       address: data.address
-//     };
-//     try {
-//       const result = await axios.post(
-//         `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/social`,
-//         payload,
-//       );
-
-
-
-//       toast.success("Brand information updated successfully");
-//       reset({
-//         name: "",
-//         phone: "",
-//         socials: [{ platform: "facebook", url: "" }],
-//       });
-//       setLogoPreview(null);
-//     } catch (error) {
-//       toast.error(`error: ${(error as Error).message}`);
-//     }
-//   };
-
-//   return (
-//     <form
-//       onSubmit={handleSubmit(onSubmit)}
-//       className="max-w-xl space-y-5 rounded-xl border p-6 shadow-sm"
-//     >
-//       {/* Logo Upload */}
-//       <div>
-//         <label className="mb-1 block text-sm font-medium">Logo</label>
-//         <div>
-//           {uploading ? (
-//             <div className="flex items-center justify-center w-16 h-16 border rounded bg-gray-100">
-//               <div className="w-6 h-6 border-4 border-t-primary border-gray-200 rounded-full animate-spin"></div>
-//             </div>
-//           ) : (
-//             <label className="flex cursor-pointer items-center gap-2 rounded border px-3 py-2 text-sm">
-//               <Upload size={16} />
-//               Upload Logo
-//               <input
-//                 type="file"
-//                 accept="image/*"
-//                 className="hidden"
-//                 onChange={handleLogoChange}
-//               />
-//             </label>
-//           )}
-//         </div>
-//         {logoPreview && (
-//           <img
-//             src={logoPreview}
-//             alt="Logo preview"
-//             className="mt-2 h-16 w-16 rounded object-cover border"
-//           />
-//         )}
-//         {errors.logo && (
-//           <p className="text-xs text-red-500">Logo is required</p>
-//         )}
-//       </div>
-
-//       {/* Name */}
-//       <div>
-//         <label className="mb-1 block text-sm font-medium">Name</label>
-//         <input
-//           className="w-full rounded border px-3 py-2 text-sm"
-//           placeholder="Brand name"
-//           {...register("name", { required: true })}
-//         />
-//       </div>
-
-//       {/* Phone */}
-//       <div>
-//         <label className="mb-1 block text-sm font-medium">Phone</label>
-//         <input
-//           className="w-full rounded border px-3 py-2 text-sm"
-//           placeholder="Phone number"
-//           {...register("phone", { required: true })}
-//         />
-//       </div>
-//       {/* email */}
-//       <div>
-//         <label className="mb-1 block text-sm font-medium">Email</label>
-//         <input
-//           className="w-full rounded border px-3 py-2 text-sm"
-//           placeholder="info@gmail.com"
-//           {...register("email", { required: true })}
-//         />
-//       </div>
-//       {/* address */}
-//       <div>
-//         <label className="mb-1 block text-sm font-medium">Address</label>
-//         <input
-//           className="w-full rounded border px-3 py-2 text-sm"
-//           placeholder="add your address"
-//           {...register("address", { required: true })}
-//         />
-//       </div>
-
-//       {/* Social Links */}
-//       <div className="space-y-3">
-//         <label className="block text-sm font-medium">Social Links</label>
-
-//         {fields.map((field, index) => {
-//           const Icon =
-//             SOCIAL_OPTIONS.find((s) => s.value === field.platform)?.icon ||
-//             null;
-
-//           return (
-//             <div key={field.id} className="flex gap-2">
-//               {/* Platform Select */}
-//               <select
-//                 className="w-44 rounded border px-2 py-2 text-sm"
-//                 {...register(`socials.${index}.platform` as const)}
-//               >
-//                 {SOCIAL_OPTIONS.map((item) => (
-//                   <option key={item.value} value={item.value}>
-//                     {item.label}
-//                   </option>
-//                 ))}
-//               </select>
-
-//               {/* URL Input */}
-//               <div className="relative flex-1">
-//                 {Icon && (
-//                   <Icon className="absolute left-2 top-2.5 text-gray-400" />
-//                 )}
-//                 <input
-//                   className="w-full rounded border py-2 pl-8 pr-2 text-sm"
-//                   placeholder="Social link"
-//                   {...register(`socials.${index}.url` as const)}
-//                 />
-//               </div>
-//             </div>
-//           );
-//         })}
-
-//         {/* Add More */}
-//         <button
-//           type="button"
-//           onClick={() => append({ platform: "facebook", url: "" })}
-//           className="flex items-center gap-1 text-sm text-primary"
-//         >
-//           <Plus size={16} />
-//           Add more social link
-//         </button>
-//       </div>
-
-//       {/* Submit */}
-//       <button
-//         type="submit"
-//         className="w-full rounded bg-primary py-2 text-sm text-white"
-//       >
-//         Submit
-//       </button>
-//     </form>
-//   );
-// };
-
-// export default BrandForm;
-
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import {
@@ -264,7 +32,7 @@ type FormValues = {
   socials: SocialLink[];
 };
 
-const BrandForm = () => {
+const BrandForm = ({ brandInfo }: { brandInfo: any }) => {
   const {
     register,
     control,
@@ -273,9 +41,35 @@ const BrandForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: {
-      socials: [{ platform: "facebook", url: "" }],
+      name: brandInfo?.name || "",
+      phone: brandInfo?.phone || "",
+      email: brandInfo?.email || "",
+      address: brandInfo?.address || "",
+      socials:
+        brandInfo?.socials?.length > 0
+          ? brandInfo.socials
+          : [{ platform: "facebook", url: "" }],
     },
   });
+
+  useEffect(() => {
+    if (brandInfo?.logo) {
+      setLogoPreview(brandInfo.logo);
+    }
+
+    if (brandInfo) {
+      reset({
+        name: brandInfo.name || "",
+        phone: brandInfo.phone || "",
+        email: brandInfo.email || "",
+        address: brandInfo.address || "",
+        socials:
+          brandInfo.socials?.length > 0
+            ? brandInfo.socials
+            : [{ platform: "facebook", url: "" }],
+      });
+    }
+  }, [brandInfo, reset]);
 
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -286,7 +80,9 @@ const BrandForm = () => {
     name: "socials",
   });
 
-  const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -315,45 +111,29 @@ const BrandForm = () => {
   };
 
   const onSubmit = async (data: FormValues) => {
-    if (!logoPreview) {
-      toast.error("Please upload a logo");
-      return;
-    }
+    const payload: any = {};
 
-    // Validate social URLs
-    const invalidSocials = data.socials.filter(
-      (social) => social.url && !social.url.startsWith("http"),
+    if (logoPreview) payload.logo = logoPreview;
+    if (data.name) payload.name = data.name;
+    if (data.phone) payload.phone = data.phone;
+    if (data.email) payload.email = data.email;
+    if (data.address) payload.address = data.address;
+
+    const validSocials = data.socials?.filter(
+      (social) => social.url?.trim() !== "",
     );
 
-    if (invalidSocials.length > 0) {
-      toast.error("Please enter valid URLs (starting with http/https)");
-      return;
+    if (validSocials?.length > 0) {
+      payload.socials = validSocials;
     }
 
-    const payload = {
-      logo: logoPreview,
-      name: data.name,
-      phone: data.phone,
-      socials: data.socials.filter((social) => social.url.trim() !== ""),
-      email: data.email,
-      address: data.address,
-    };
-
     try {
-      await axios.post(
+      await axios.patch(
         `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/social`,
         payload,
       );
 
-      toast.success("Brand information saved successfully!");
-      reset({
-        name: "",
-        phone: "",
-        email: "",
-        address: "",
-        socials: [{ platform: "facebook", url: "" }],
-      });
-      setLogoPreview(null);
+      toast.success("Brand information updated successfully!");
     } catch (error) {
       toast.error(`Error: ${(error as Error).message}`);
     }
@@ -417,7 +197,9 @@ const BrandForm = () => {
                     ) : (
                       <div className="text-center p-4">
                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                        <p className="text-xs text-gray-500">Upload logo</p>
+                        <p className="text-xs text-gray-500">
+                          Upload logo
+                        </p>
                       </div>
                     )}
                   </div>
@@ -481,7 +263,8 @@ const BrandForm = () => {
                         required: "Brand name is required",
                         minLength: {
                           value: 2,
-                          message: "Name must be at least 2 characters",
+                          message:
+                            "Name must be at least 2 characters",
                         },
                       })}
                     />
@@ -496,7 +279,8 @@ const BrandForm = () => {
                 {/* Phone */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Phone Number <span className="text-red-500">*</span>
+                    Phone Number{" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -524,7 +308,8 @@ const BrandForm = () => {
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Email Address <span className="text-red-500">*</span>
+                    Email Address{" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -537,7 +322,8 @@ const BrandForm = () => {
                       {...register("email", {
                         required: "Email is required",
                         pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          value:
+                            /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: "Invalid email address",
                         },
                       })}
@@ -610,10 +396,15 @@ const BrandForm = () => {
                       {!previewMode && (
                         <select
                           className="w-36 px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 transition-colors"
-                          {...register(`socials.${index}.platform` as const)}
+                          {...register(
+                            `socials.${index}.platform` as const,
+                          )}
                         >
                           {SOCIAL_OPTIONS.map((item) => (
-                            <option key={item.value} value={item.value}>
+                            <option
+                              key={item.value}
+                              value={item.value}
+                            >
                               {item.label}
                             </option>
                           ))}
@@ -648,7 +439,9 @@ const BrandForm = () => {
                           <input
                             className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 transition-colors"
                             placeholder={`Enter ${SOCIAL_OPTIONS.find((s) => s.value === field.platform)?.label} URL`}
-                            {...register(`socials.${index}.url` as const)}
+                            {...register(
+                              `socials.${index}.url` as const,
+                            )}
                           />
                         )}
                       </div>
@@ -672,7 +465,9 @@ const BrandForm = () => {
               {!previewMode && (
                 <button
                   type="button"
-                  onClick={() => append({ platform: "facebook", url: "" })}
+                  onClick={() =>
+                    append({ platform: "facebook", url: "" })
+                  }
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                 >
                   <Plus className="w-4 h-4" />
@@ -759,7 +554,9 @@ const BrandForm = () => {
                   </div>
                 )}
                 <p className="text-sm text-gray-600 text-center">
-                  {logoPreview ? "Logo Preview" : "Upload logo to see preview"}
+                  {logoPreview
+                    ? "Logo Preview"
+                    : "Upload logo to see preview"}
                 </p>
               </div>
 
@@ -792,7 +589,9 @@ const BrandForm = () => {
 
               {/* Social Links Preview */}
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Social Links</h4>
+                <h4 className="font-medium text-gray-900">
+                  Social Links
+                </h4>
                 <div className="space-y-2">
                   {fields
                     .filter((field) => field.url.trim())
@@ -813,7 +612,8 @@ const BrandForm = () => {
                       );
                     })}
 
-                  {fields.filter((field) => field.url.trim()).length === 0 && (
+                  {fields.filter((field) => field.url.trim())
+                    .length === 0 && (
                     <p className="text-sm text-gray-500 italic text-center py-4">
                       No social links added yet
                     </p>
@@ -823,10 +623,14 @@ const BrandForm = () => {
 
               {/* Tips */}
               <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                <h4 className="font-medium text-blue-900 mb-2">💡 Tips</h4>
+                <h4 className="font-medium text-blue-900 mb-2">
+                  💡 Tips
+                </h4>
                 <ul className="space-y-1 text-xs text-blue-800">
                   <li>• Use high-quality logo for best display</li>
-                  <li>• Include all relevant social media profiles</li>
+                  <li>
+                    • Include all relevant social media profiles
+                  </li>
                   <li>• Keep contact information up to date</li>
                   <li>• Use HTTPS URLs for social links</li>
                 </ul>

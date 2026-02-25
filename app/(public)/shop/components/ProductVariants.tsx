@@ -189,30 +189,6 @@ export default function ProductVariant({
     return value.toLowerCase().trim() || "";
   }
 
-  //   whole color change and depend on that change the sku and availability
-  /* const handleColorChange = (colorObj: {
-    name: string;
-    hex: string | undefined;
-  }) => {
-    setSelectedColor(colorObj);
-
-    const firstAvailableVariantForColor = variants.find(
-      (v) =>
-        normalize(v.color) === normalize(colorObj.name),
-    );
-
-    if (firstAvailableVariantForColor) {
-      setSelectedSize(firstAvailableVariantForColor.attributes.size);
-    }
-  }; */
-
-  //   variant selected fun
-  // const selectedVariant = variants.find(
-  //   (v) =>
-  //     normalize(v.attributes.color) === normalize(selectedColor.name) &&
-  //     normalize(v.attributes.size) === normalize(selectedSize),
-  // );
-
   const selectedVariant =
     variants.length === 0
       ? null
@@ -259,7 +235,7 @@ export default function ProductVariant({
       ? selectedVariant!.stock < 5
         ? "Stock almost finished"
         : "In Stock"
-      : "Unavailable";
+      : "Out of stock";
 
   // check the sku is exit or not
   const sku = selectedVariant?.sku ?? "N/A";

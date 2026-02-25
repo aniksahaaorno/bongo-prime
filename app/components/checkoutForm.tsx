@@ -50,17 +50,11 @@ export default function CheckoutForm() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const router = useRouter();
 
-  console.log(cartItems);
-
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
+    fullAddress: "",
     phoneNumber: "",
     email: "",
-    streetAddress: "",
-    city: "",
-    region: "",
-    // postalCode: "",
     promoCode: "",
   });
 
@@ -102,7 +96,9 @@ export default function CheckoutForm() {
   }
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -154,22 +150,35 @@ export default function CheckoutForm() {
     return total + price * item.quantity;
   }, 0);
 
-  const deliveryCharge = deliveryMethod === "inside" ? 80 : 100;
+  const deliveryCharge = deliveryMethod === "inside" ? 80 : 130;
 
   const grandTotal = subtotal + deliveryCharge;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fraudRoles.isValidName(formData.firstName))
-      markLocal("name");
-    if (!fraudRoles.isValidBDPhone(formData.phoneNumber))
-      markLocal("phone");
-    if (formData.email && !fraudRoles.isValidEmail(formData.email))
-      markLocal("email");
-    if (!fraudRoles.isValidAddress(formData.streetAddress))
-      markLocal("address");
+    // reset local counters each submit
+    localInvalidCount = 0;
+    localInvalidFields = [];
 
+    // Fraud validation
+    if (!fraudRoles.isValidName(formData.fullName)) {
+      markLocal("name");
+    }
+
+    if (!fraudRoles.isValidBDPhone(formData.phoneNumber)) {
+      markLocal("phone");
+    }
+
+    if (!fraudRoles.isValidEmail(formData.email)) {
+      markLocal("email");
+    }
+
+    if (!fraudRoles.isValidAddress(formData.fullAddress)) {
+      markLocal("address");
+    }
+
+    // update fraud state
     setFraudState((prev) => ({
       ...prev,
       invalidCount: prev.invalidCount + localInvalidCount,
@@ -193,28 +202,23 @@ export default function CheckoutForm() {
       },
     }));
 
-    const inValidFields = localInvalidFields.join(", ");
-
     if (localInvalidCount > 0) {
       toast.error(
-        `Invalid your ${inValidFields} field${
-          localInvalidCount > 1 ? "s" : ""
-        } Check it and try again!`,
+        `Invalid field${localInvalidCount > 1 ? "s" : ""}: ${localInvalidFields.join(", ")}`,
       );
       return;
     }
 
-    const requiredFields = [
-      "firstName",
+    // Required check
+    const requiredFields: (keyof typeof formData)[] = [
+      "fullName",
       "phoneNumber",
-      "streetAddress",
       "email",
-      "city",
-      "region",
+      "fullAddress",
     ];
 
     const missingField = requiredFields.find(
-      (field) => !formData[field as keyof typeof formData],
+      (field) => !formData[field]?.trim(),
     );
 
     if (missingField) {
@@ -222,43 +226,38 @@ export default function CheckoutForm() {
       return;
     }
 
-    console.log(cartItems);
+    if (cartItems.length === 0) {
+      toast.error("Cart is empty");
+      return;
+    }
 
     const orderData = {
       customerInfo: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        fullName: formData.fullName,
         phone: formData.phoneNumber,
         email: formData.email,
-      },
-      shippingAddress: {
-        street: formData.streetAddress,
-        city: formData.city,
-        region: formData.region,
-        // postalCode: formData.postalCode,
+        address: formData.fullAddress,
       },
       products: cartItems.map((item) => ({
         productTitle: item.title,
         slug: item.slug,
         sku: item.sku,
-        price: item.productPrice,
+        price: item.selectedVariant?.price ?? item.productPrice,
         quantity: item.quantity,
         variant: item.selectedVariant,
         color: item.selectedColor,
         size: item.selectedProductSize,
       })),
-      subtotal: subtotal,
-      deliveryCharge: deliveryCharge,
-      grandTotal: grandTotal,
-      paymentMethod: paymentMethod,
-      deliveryMethod: deliveryMethod,
+      subtotal,
+      deliveryCharge,
+      grandTotal,
+      paymentMethod,
+      deliveryMethod,
       promoCode: formData.promoCode,
       orderStatus: "pending",
       paymentStatus: "pending",
       sourceUrl: window.location.href,
     };
-
-    console.log(orderData);
 
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -295,28 +294,13 @@ export default function CheckoutForm() {
           orderId: response.data.orderId,
           amount: grandTotal,
         });
-
-        // if (paymentMethod === "sslcommerz" && response.data.paymentUrl) {
-        //   window.location.replace(response.data.paymentUrl);
-        // } else {
-        //   window.location.href = "/order-success";
-        // }
       }
     } catch (error: any) {
       console.error("Order submission error:", error);
 
-      // if (error.response.status === 302 && error.response.data.isRedirect) {
-      //   router.push("/otp-verification?orderId=" + error.response.data.orderId);
-      //   toast.error(
-      //     error.response?.data?.message ||
-      //       "Something went wrong. Please try again letter.",
-      //   );
-      //   return;
-      // }
-      // console.log({error: error})
       toast.error(
         error.response?.data?.message ||
-          "Something went wrong. Please try again letter.",
+          "Something went wrong. Please try again later.",
       );
     } finally {
       setIsSubmitting(false);
@@ -331,153 +315,72 @@ export default function CheckoutForm() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
             {/* Left Column - Form */}
             <div className="space-y-6 lg:col-span-3">
-              {/* Personal Information */}
+              {/* Customer Information */}
               <div className="rounded-lg bg-white p-6 shadow-sm">
                 <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                  পার্সোনাল তথ্য:
+                  কাস্টমার তথ্য:
                 </h2>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        প্রথম নাম{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <Input
-                        type="text"
-                        name="firstName"
-                        placeholder="আপনার প্রথম নাম লিখুন"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        className="w-full border-gray-300 bg-gray-50"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        শেষ নাম
-                      </label>
-                      <Input
-                        type="text"
-                        name="lastName"
-                        placeholder="আপনার শেষ নাম লিখুন"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        className="w-full border-gray-300 bg-gray-50"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        ফোন নম্বর{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <div className="flex gap-2">
-                        <select
-                          className="w-16 rounded-md border border-gray-300 bg-gray-50 px-2 py-2 text-sm"
-                          defaultValue="BD"
-                        >
-                          <option>BD</option>
-                          {/* <option>US</option>
-                          <option>UK</option> */}
-                        </select>
-                        <Input
-                          type="tel"
-                          name="phoneNumber"
-                          placeholder="আপনার ফোন নম্বর লিখুন"
-                          value={formData.phoneNumber}
-                          onChange={handleInputChange}
-                          className="flex-1 border-gray-300 bg-gray-50"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        ইমেইল
-                      </label>
-                      <Input
-                        type="email"
-                        name="email"
-                        placeholder="আপনার ইমেইল লিখুন"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="w-full border-gray-300 bg-gray-50"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Delivery Address */}
-              <div className="rounded-lg bg-white p-6 shadow-sm">
-                <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                  ডেলিভারি ঠিকানা:
-                </h2>
                 <div className="space-y-4">
+                  {/* Full Name */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      এরিয়া সিলেক্ট করুন
-                    </label>
-                    <select
-                      name="region"
-                      value={formData.region}
-                      onChange={handleInputChange}
-                      className="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm"
-                    >
-                      <option value="">Select</option>
-                      <option value="dhaka">Dhaka</option>
-                      <option value="chittagong">Chittagong</option>
-                      <option value="sylhet">Sylhet</option>
-                      <option value="khulna">Khulna</option>
-                      <option value="rajshahi">Rajshahi</option>
-                      <option value="rangpur">Rangpur</option>
-                      <option value="barishal">Barishal</option>
-                      <option value="mymensingh">Mymensingh</option>
-                    </select>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        সিটি
-                      </label>
-                      <Input
-                        type="text"
-                        name="city"
-                        placeholder="আপনার সিটি লিখুন"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        className="w-full border-gray-300 bg-gray-50"
-                      />
-                    </div>
-                    {/* <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        Postal Code
-                      </label>
-                      <Input
-                        type="text"
-                        name="postalCode"
-                        placeholder="Enter Your Postal Code"
-                        value={formData.postalCode}
-                        onChange={handleInputChange}
-                        className="w-full border-gray-300 bg-gray-50"
-                      />
-                    </div> */}
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      হাউজ <span className="text-red-500">*</span>
+                      পুরো নাম <span className="text-red-500">*</span>
                     </label>
                     <Input
                       type="text"
-                      name="streetAddress"
-                      placeholder="আপনার হাউজ/রোড/এলাকা লিখুন"
-                      value={formData.streetAddress}
+                      name="fullName"
+                      placeholder="আপনার পুরো নাম লিখুন"
+                      value={formData.fullName}
                       onChange={handleInputChange}
                       className="w-full border-gray-300 bg-gray-50"
                     />
+                  </div>
+
+                  {/* Phone Number */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      ফোন নম্বর{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      type="tel"
+                      name="phoneNumber"
+                      placeholder="আপনার ফোন নম্বর লিখুন"
+                      value={formData.phoneNumber}
+                      onChange={handleInputChange}
+                      className="w-full border-gray-300 bg-gray-50"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      ইমেইল <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="আপনার ইমেইল লিখুন"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full border-gray-300 bg-gray-50"
+                    />
+                  </div>
+
+                  {/* Full Address */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      পুরো ঠিকানা{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      name="fullAddress"
+                      placeholder="হাউজ/রোড/এলাকা/জেলা লিখুন"
+                      value={formData.fullAddress}
+                      onChange={handleInputChange}
+                      className="h-[100px] w-full border-gray-300 bg-gray-50 p-2 rounded"
+                    ></textarea>
                   </div>
                 </div>
               </div>

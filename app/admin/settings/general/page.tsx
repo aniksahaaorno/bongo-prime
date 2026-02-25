@@ -3,6 +3,7 @@ import { Banner } from "../components/banner";
 import ProductSliderSection from "@/app/components/heroSlider";
 import BrandForm from "../components/socialInfo";
 import { Controller } from "../components/controller";
+import { getBrandInfo } from './../../../../lib/social';
 
 const GeneralSection = async () => {
   const result = await fetch(
@@ -28,10 +29,12 @@ const GeneralSection = async () => {
 
   const mainSlider = { id: "main", images: toArray(mainBanner) };
 
+  const brandInfo = await getBrandInfo();
+
   return (
     <div className="space-y-10">
       <div>
-        <Controller mainSlider={mainSlider} sideSliders={secondSlider} />
+        <Controller mainSlider={mainSlider} sideSliders={secondSlider} brandInfo={brandInfo?.data || {}} />
       </div>
     </div>
   );

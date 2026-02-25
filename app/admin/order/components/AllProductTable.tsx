@@ -22,17 +22,10 @@ import { toast } from "sonner";
 
 // ============ TYPE DEFINITIONS ============
 interface CustomerInfo {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   phone: string;
   email: string;
-}
-
-interface ShippingAddress {
-  street: string;
-  city: string;
-  region: string;
-  postalCode: string;
+  address: string;
 }
 
 interface VariantAttributes {
@@ -59,7 +52,6 @@ interface OrderProduct {
 export interface Order {
   _id: string;
   customerInfo: CustomerInfo;
-  shippingAddress: ShippingAddress;
   products: OrderProduct[];
   subtotal: number;
   deliveryCharge: number;
@@ -109,7 +101,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
     });
   };
 
-  const fullAddress = `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.region}, ${order.shippingAddress.postalCode}`;
+  const fullAddress = order.customerInfo.address;
 
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -145,8 +137,7 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 <div>
                   <p className="text-gray-600">Name</p>
                   <p className="font-semibold text-gray-900">
-                    {order.customerInfo.firstName}{" "}
-                    {order.customerInfo.lastName}
+                    {order.customerInfo.fullName}
                   </p>
                 </div>
                 <div>
@@ -420,8 +411,7 @@ const AllProductTable = ({
       month: "short",
       day: "numeric",
     });
-  const getFullAddress = (address: ShippingAddress) =>
-    `${address.street}, ${address.city}, ${address.region}`;
+  const getFullAddress = (order: Order) => order.customerInfo.address;
 
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
@@ -465,16 +455,12 @@ const AllProductTable = ({
         <div><img src="${logoUrl}" style="max-width: 150px; height: auto;"/></div> <style>body{font-family:Arial;margin:40px;color:#333;}h1{color:#0970B4;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{padding:10px;text-align:left;border:1px solid #ddd;}th{background:#0970B4;color:white;}.total{font-weight:bold;font-size:18px;}.section{margin:20px 0;padding:15px;border:1px solid #ddd;border-radius:5px;}</style></head><body><h1>Order Details</h1><p><strong>Order ID:</strong> ${
           order._id
         }</p><div class="section"><h3>Customer</h3><p><strong>Name:</strong> ${
-          order.customerInfo.firstName
-        } ${order.customerInfo.lastName}</p><p><strong>Email:</strong> ${
+          order.customerInfo.fullName
+        } </p><p><strong>Email:</strong> ${
           order.customerInfo.email
         }</p><p><strong>Phone:</strong> ${
           order.customerInfo.phone
-        }</p></div><div class="section"><h3>Address</h3><p>${getFullAddress(
-          order.shippingAddress,
-        )}, ${
-          order.shippingAddress.postalCode
-        }</p></div><div class="section"><h3>Items</h3><table><tr><th>Product</th><th>SKU</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>${order.products
+        }</p></div><div class="section"><h3>Address</h3><p>${order.customerInfo.address}</p></div><div class="section"><h3>Items</h3><table><tr><th>Product</th><th>SKU</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>${order.products
           .map(
             (p) =>
               `<tr><td>${p.title}</td><td>${p.variant.sku}</td><td>${
@@ -627,8 +613,7 @@ const AllProductTable = ({
 
                     <td className="px-6 py-4">
                       <div className="text-sm font-semibold text-gray-900">
-                        {order.customerInfo.firstName}{" "}
-                        {order.customerInfo.lastName}
+                        {order.customerInfo.fullName}
                       </div>
                       {/* <div className="text-xs text-gray-500">
                         {order.customerInfo.email}
@@ -798,8 +783,7 @@ const AllProductTable = ({
               <div className="p-4 md:p-6">
                 <div className="mb-4 pb-4 border-b border-gray-200">
                   <h3 className="text-base font-semibold text-gray-900">
-                    {order.customerInfo.firstName}{" "}
-                    {order.customerInfo.lastName}
+                    {order.customerInfo.fullName}
                   </h3>
                   <p className="text-xs md:text-sm text-gray-600 mt-1">
                     {order.customerInfo.email}
@@ -811,7 +795,7 @@ const AllProductTable = ({
                     📍 LOCATION
                   </p>
                   <p className="text-sm text-gray-900">
-                    {getFullAddress(order.shippingAddress)}
+                    {getFullAddress(order)}
                   </p>
                 </div>
 

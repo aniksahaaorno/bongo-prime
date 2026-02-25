@@ -103,18 +103,20 @@ export default function OrdersTable({
       confirmButtonColor: "#0970B4",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
-            `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/delete-order/${id}`
+            `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/delete-order/${id}`,
           );
 
           if (response.status === 200) {
             //  setPrimaryOrders((prevOrders) =>
             //    prevOrders.filter((o) => o._id !== id)
             //  );
-            toast.success(response.data.message ?? "Deleted successfully");
+            toast.success(
+              response.data.message ?? "Deleted successfully",
+            );
           } else {
             alert("Failed to delete the order. Please try again.");
           }
@@ -122,7 +124,7 @@ export default function OrdersTable({
           console.error("Delete Error:", error);
           alert(
             error?.response?.data?.message ||
-              "Something went wrong while deleting."
+              "Something went wrong while deleting.",
           );
         }
         Swal.fire({
@@ -201,14 +203,13 @@ export default function OrdersTable({
                 <TableCell className="px-2 sm:px-4">
                   <Checkbox
                     checked={selectedOrders.has(order._id)}
-                    onCheckedChange={() => onToggleOrderSelection(order._id)}
+                    onCheckedChange={() =>
+                      onToggleOrderSelection(order._id)
+                    }
                   />
                 </TableCell>
                 <TableCell className="px-2 sm:px-4 font-medium text-xs sm:text-sm">
-                  <div>{order.customerInfo.firstName}</div>
-                  <div className="hidden sm:block text-muted-foreground">
-                    {order.customerInfo.lastName}
-                  </div>
+                  <div>{order.customerInfo.fullName}</div>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell px-2 sm:px-4 text-xs sm:text-sm">
                   {order.customerInfo.phone}
@@ -229,8 +230,9 @@ export default function OrdersTable({
                 <TableCell className="hidden lg:table-cell px-2 sm:px-4">
                   <Badge
                     className={`text-xs ${
-                      courierStatusColors[order.courierStatus as string] ||
-                      "bg-gray-100 text-gray-800"
+                      courierStatusColors[
+                        order.courierStatus as string
+                      ] || "bg-gray-100 text-gray-800"
                     }`}
                   >
                     {order.courierStatus}
@@ -239,7 +241,7 @@ export default function OrdersTable({
                 <TableCell className="px-2 sm:px-4">
                   <Badge
                     className={`text-xs ${getOrderStatusClass(
-                      order.orderStatus
+                      order.orderStatus,
                     )}`}
                   >
                     {order.orderStatus}
@@ -259,7 +261,11 @@ export default function OrdersTable({
                 <TableCell className="px-2 sm:px-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                      >
                         ⋯
                       </Button>
                     </DropdownMenuTrigger>
@@ -276,7 +282,9 @@ export default function OrdersTable({
                         </DropdownMenuItem>
                       </Link>
                       <DropdownMenuItem
-                        onClick={() => handleAction("print", order._id)}
+                        onClick={() =>
+                          handleAction("print", order._id)
+                        }
                       >
                         <Printer className="mr-2 h-4 w-4" />
                         Print

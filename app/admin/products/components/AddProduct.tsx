@@ -907,8 +907,12 @@ export default function AddProductForm({ allCategory }: any) {
                             Color
                           </th>
                           <th className="text-left py-3 px-3 font-medium text-gray-700">
+                            Price
+                          </th>
+                          <th className="text-left py-3 px-3 font-medium text-gray-700">
                             Attributes
                           </th>
+
                           <th className="text-left py-3 px-3 font-medium text-gray-700">
                             Action
                           </th>
@@ -923,6 +927,13 @@ export default function AddProductForm({ allCategory }: any) {
                             <td className="py-3 px-3">
                               {variant.color}
                             </td>
+
+                            <td className="py-3 px-3 font-medium">
+                              {variant.price
+                                ? `৳ ${variant.price}`
+                                : "—"}
+                            </td>
+
                             <td className="py-3 px-3">
                               <table className="w-full">
                                 <thead>

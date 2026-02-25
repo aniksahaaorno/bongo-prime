@@ -11,7 +11,8 @@ import MarqueeForm from "./marquee";
 export const Controller = ({
   mainSlider,
   sideSliders,
-}: ProductSliderSectionProps) => {
+  brandInfo,
+}: ProductSliderSectionProps & { brandInfo: any }) => {
   const [selected, setSelected] = React.useState<string>("Brand Info");
 
   return (
@@ -50,7 +51,7 @@ export const Controller = ({
         <div>
           {selected === "Brand Info" && (
             <div>
-              <BrandForm />
+              <BrandForm brandInfo={brandInfo} />
             </div>
           )}
           {selected === "Marquee" && (
