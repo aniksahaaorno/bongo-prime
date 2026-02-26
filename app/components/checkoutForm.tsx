@@ -510,9 +510,10 @@ export default function CheckoutForm() {
                           setPaymentMethod(e.target.value)
                         }
                         className="h-4 w-4"
+                        disabled
                       />
                       <span className="flex-1 font-medium text-gray-900">
-                        বিকাশ
+                        বিকাশ - coming soon
                       </span>
                       <div className="flex gap-2">
                         <span className="inline-block">

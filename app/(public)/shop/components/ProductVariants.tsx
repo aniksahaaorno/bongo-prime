@@ -388,7 +388,7 @@ export default function ProductVariant({
               onClick={handleBuyNow}
               className="px-5 py-2 bg-primary text-white rounded-lg font-semibold hover:opacity-90 hover:from-primary-foreground hover:cursor-pointer hover:to-primary w-full"
             >
-              ক্রয় করুন
+              অর্ডার করুন
             </button>
           </>
         )}
