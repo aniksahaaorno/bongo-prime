@@ -253,10 +253,10 @@ export default function OrdersTable({
                 </TableCell>
                 <TableCell className="hidden sm:table-cell px-2 sm:px-4 font-medium text-xs sm:text-sm text-right">
                   ৳
-                  {order.grandTotal.toLocaleString("en-BD", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  })}
+                  {order?.grandTotal ? order.grandTotal.toLocaleString("en-BD", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                }): "-"}
                 </TableCell>
                 <TableCell className="px-2 sm:px-4">
                   <DropdownMenu>

@@ -108,6 +108,8 @@ export default function OrdersCards({
     );
   }
 
+  console.log(primaryOrders)
+
   return (
     <div className="space-y-3">
       {primaryOrders.map((order) => (
@@ -129,7 +131,7 @@ export default function OrdersCards({
               />
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm text-gray-900">
-                  {order.customerInfo.firstName} {order.customerInfo.lastName}
+                  {order.customerInfo.fullName}
                 </h3>
                 <p className="text-xs text-gray-500">
                   {order.customerInfo.phone}
@@ -153,7 +155,7 @@ export default function OrdersCards({
             </div>
             <div className="space-y-1">
               <p className="text-gray-500">Quantity</p>
-              <p className="font-medium text-gray-900">{order.quantity}</p>
+              <p className="font-medium text-gray-900">{order.products?.reduce((sum, p) => sum + p.quantity, 0)}</p>
             </div>
             <div className="space-y-1">
               <p className="text-gray-500">Courier</p>
@@ -163,10 +165,10 @@ export default function OrdersCards({
               <p className="text-gray-500">Total</p>
               <p className="font-medium text-gray-900">
                 ৳
-                {order.grandTotal.toLocaleString("en-BD", {
+                {order?.grandTotal ? order.grandTotal.toLocaleString("en-BD", {
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 2,
-                })}
+                }): "-"}
               </p>
             </div>
           </div>

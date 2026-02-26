@@ -1,11 +1,12 @@
 export interface Order {
   _id: string;
   customerInfo: {
-    firstName: string;
-    lastName: string;
+    fullName: string;
     phone: string;
     email: string;
+    address: string;
   };
+
   quantity: number;
   courierName: string;
   courierStatus: string;
@@ -13,5 +14,7 @@ export interface Order {
   note: string;
   createdAt: string;
   grandTotal: number;
-  orderStatus: string
+  orderStatus: string;
+
+  products: any[];
 }
