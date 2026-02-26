@@ -162,9 +162,6 @@ export default function CheckoutForm() {
     localInvalidFields = [];
 
     // Fraud validation
-    if (!fraudRoles.isValidName(formData.fullName)) {
-      markLocal("name");
-    }
 
     if (!fraudRoles.isValidBDPhone(formData.phoneNumber)) {
       markLocal("phone");
