@@ -20,8 +20,7 @@ function isValidName(name: string) {
   }
 
   const parts = clean.split(/\s+/);
-  if (parts.length > 3) return false;
-  if (parts.some((p) => p.length < 2)) return false;
+  if (parts.length > 5) return false;
 
   const vowels = clean.match(/[aeiou]/gi) || [];
 
@@ -89,4 +88,4 @@ export const fraudRoles = {
   isValidBDPhone,
   isValidEmail,
   isValidAddress,
-};
+};  

@@ -325,12 +325,12 @@ export default function CheckoutForm() {
                   {/* Full Name */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      পুরো নাম <span className="text-red-500">*</span>
+                      নাম <span className="text-red-500">*</span>
                     </label>
                     <Input
                       type="text"
                       name="fullName"
-                      placeholder="আপনার পুরো নাম লিখুন"
+                      placeholder="আপনার নাম লিখুন"
                       value={formData.fullName}
                       onChange={handleInputChange}
                       className="w-full border-gray-300 bg-gray-50"
@@ -371,7 +371,7 @@ export default function CheckoutForm() {
                   {/* Full Address */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      পুরো ঠিকানা{" "}
+                      সম্পুর্ণ ঠিকানা{" "}
                       <span className="text-red-500">*</span>
                     </label>
                     <textarea

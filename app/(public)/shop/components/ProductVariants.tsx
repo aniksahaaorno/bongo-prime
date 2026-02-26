@@ -399,14 +399,14 @@ export default function ProductVariant({
             onClick={() => onCloseModal?.()}
             className="flex-1 border border-gray-300 py-2 rounded-lg text-sm hover:bg-gray-100"
           >
-            আরো ক্রয় করুন
+            আরো দেখুন
           </button>
           {isBuyNow === true ? (
             <button
               onClick={handleBuyNow}
               className="flex-1 bg-primary text-white py-2 rounded-lg text-sm hover:bg-primary"
             >
-              ক্রয় করুন
+              অর্ডার করুন
             </button>
           ) : (
             <button

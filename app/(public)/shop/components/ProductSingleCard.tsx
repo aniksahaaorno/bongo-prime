@@ -92,8 +92,6 @@ export const SingleProductCard = ({ product }: { product: any }) => {
     setIsHovered(false);
   };
 
-  console.log({discountedPrice: discountedPrice})
-
   return (
     <div
       className="group/product bg-white overflow-hidden hover:shadow-lg transition-all duration-300 relative border border-gray-200"
