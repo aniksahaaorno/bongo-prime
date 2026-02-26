@@ -33,11 +33,19 @@ const ORDER_STATUSES = [
   "Completed",
 ];
 
-
-export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) {
-  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
-  const [filterStatus, setFilterStatus] = useState<string | null>(null);
-  const [bulkActionDropdownOpen, setBulkActionDropdownOpen] = useState(false);
+export default function ManageOrders({
+  MOCK_ORDERS,
+}: {
+  MOCK_ORDERS: Order[];
+}) {
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(
+    new Set(),
+  );
+  const [filterStatus, setFilterStatus] = useState<string | null>(
+    null,
+  );
+  const [bulkActionDropdownOpen, setBulkActionDropdownOpen] =
+    useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredOrders = useMemo(() => {
@@ -46,17 +54,16 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
 
     if (filterStatus) {
       result = result.filter(
-        (order) => order.orderStatus === filterStatus.toLowerCase()
+        (order) => order.orderStatus === filterStatus.toLowerCase(),
       );
     }
-
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       result = result.filter((order) => {
         const orderId = order._id.toLowerCase();
         const customerName =
-          `${order.customerInfo.firstName} ${order.customerInfo.lastName}`.toLowerCase();
+          `${order.customerInfo.fullName}`.toLowerCase();
         const phoneNumber = order.customerInfo.phone.toLowerCase();
 
         return (
@@ -84,7 +91,9 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
     if (selectedOrders.size === filteredOrders.length) {
       setSelectedOrders(new Set());
     } else {
-      setSelectedOrders(new Set(filteredOrders.map((order) => order._id)));
+      setSelectedOrders(
+        new Set(filteredOrders.map((order) => order._id)),
+      );
     }
   };
 
@@ -103,7 +112,9 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
         alert(`Change status for orders: ${selectedIds.join(", ")}`);
         break;
       case "update-courier":
-        alert(`Update courier status for orders: ${selectedIds.join(", ")}`);
+        alert(
+          `Update courier status for orders: ${selectedIds.join(", ")}`,
+        );
         break;
       case "add-new":
         alert("Add New Order");
@@ -148,7 +159,10 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-48 sm:w-56">
+                <DropdownMenuContent
+                  align="start"
+                  className="w-48 sm:w-56"
+                >
                   <DropdownMenuCheckboxItem
                     checked={!filterStatus}
                     onCheckedChange={() => setFilterStatus(null)}
@@ -175,7 +189,9 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
                 className="flex-1 sm:flex-none gap-2"
               >
                 <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Add New Order</span>
+                <span className="hidden sm:inline">
+                  Add New Order
+                </span>
                 <span className="sm:hidden">Add Order</span>
               </Button>
 
@@ -185,7 +201,9 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
               >
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant={selectedOrders.size > 0 ? "default" : "outline"}
+                    variant={
+                      selectedOrders.size > 0 ? "default" : "outline"
+                    }
                     className="flex-1 sm:flex-none gap-2"
                     disabled={selectedOrders.size === 0}
                   >
@@ -197,21 +215,27 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
                 <DropdownMenuContent align="end">
                   <DropdownMenuCheckboxItem
                     checked={false}
-                    onCheckedChange={() => handleBulkAction("assign-user")}
+                    onCheckedChange={() =>
+                      handleBulkAction("assign-user")
+                    }
                   >
                     <UserCheck className="mr-2 h-4 w-4" />
                     Assign User
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     checked={false}
-                    onCheckedChange={() => handleBulkAction("status-change")}
+                    onCheckedChange={() =>
+                      handleBulkAction("status-change")
+                    }
                   >
                     <RefreshCw className="mr-2 h-4 w-4" />
                     Status Change
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     checked={false}
-                    onCheckedChange={() => handleBulkAction("update-courier")}
+                    onCheckedChange={() =>
+                      handleBulkAction("update-courier")
+                    }
                   >
                     <Truck className="mr-2 h-4 w-4" />
                     Update Courier Status
@@ -227,7 +251,8 @@ export default function ManageOrders({ MOCK_ORDERS }: { MOCK_ORDERS : Order[]}) 
           {filteredOrders.length !== 1 ? "s" : ""}
           {filterStatus && ` with status: ${filterStatus}`}
           {searchQuery && ` matching "${searchQuery}"`}
-          {selectedOrders.size > 0 && ` • ${selectedOrders.size} selected`}
+          {selectedOrders.size > 0 &&
+            ` • ${selectedOrders.size} selected`}
         </div>
 
         <div className="mt-4 sm:mt-5 lg:mt-6">
