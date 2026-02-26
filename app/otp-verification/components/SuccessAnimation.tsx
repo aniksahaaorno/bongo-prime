@@ -23,14 +23,16 @@ export default function SuccessAnimation({
       setCounter((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          if(paymentMethod === "cash") {
-            router.push("/");
+          if (paymentMethod === "cash") {
+            router.push(
+              `/thank-you?orderId=${orderId}&amount=${amount}&paymentMethod=${paymentMethod}`,
+            );
           } else {
             makePayment({
               orderId,
               amount,
-            })
-          } 
+            });
+          }
           return 0;
         }
 
@@ -86,7 +88,11 @@ export default function SuccessAnimation({
 
         {/* Manual Redirect Button */}
         <button
-          onClick={() => router.push("/")}
+          onClick={() =>
+            router.push(
+              `/thank-you?orderId=${orderId}&amount=${amount}&paymentMethod=${paymentMethod}`,
+            )
+          }
           className="w-full py-3 bg-emerald-500 text-white font-medium rounded-lg hover:bg-emerald-600 transition duration-200"
         >
           Go to Home Now

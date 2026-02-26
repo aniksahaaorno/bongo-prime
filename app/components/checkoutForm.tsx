@@ -283,6 +283,10 @@ export default function CheckoutForm() {
           icon: "success",
         });
 
+        router.push(
+          `/thank-you?orderId=${response.data.orderId}&amount=${grandTotal}&paymentMethod=${paymentMethod}`,
+        );
+
         clearCart();
 
         if (paymentMethod === "cash") {
