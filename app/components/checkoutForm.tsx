@@ -500,7 +500,7 @@ export default function CheckoutForm() {
 
                   {/* bkash */}
                   <label className="block cursor-pointer">
-                    <div className="flex items-center gap-3 rounded-lg border border-gray-200 p-4 hover:bg-gray-50">
+                    <div className="flex items-center gap-3 rounded-lg border border-gray-200 p-4 bg-gray-50 opacity-60 cursor-not-allowed">
                       <input
                         type="radio"
                         name="payment"
@@ -509,10 +509,10 @@ export default function CheckoutForm() {
                         onChange={(e) =>
                           setPaymentMethod(e.target.value)
                         }
-                        className="h-4 w-4"
+                        className="h-4 w-4 cursor-not-allowed"
                         disabled
                       />
-                      <span className="flex-1 font-medium text-gray-900">
+                      <span className="flex-1 font-medium text-gray-500">
                         বিকাশ - coming soon
                       </span>
                       <div className="flex gap-2">
@@ -520,7 +520,7 @@ export default function CheckoutForm() {
                           <img
                             src="https://i.postimg.cc/C1Q00cqc/BKash-b-Kash2-Logo-wine-removebg-preview.png"
                             alt="bkash"
-                            className="h-20 w-30"
+                            className="h-20 w-30 opacity-50"
                           />
                         </span>
                       </div>
