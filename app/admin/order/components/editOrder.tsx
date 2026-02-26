@@ -27,23 +27,15 @@ interface Product {
 }
 
 interface CustomerInfo {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   phone: string;
   email: string;
-}
-
-interface ShippingAddress {
-  street: string;
-  city: string;
-  region: string;
-  postalCode: string;
+  address: string;
 }
 
 interface OrderData {
   _id: string;
   customerInfo: CustomerInfo;
-  shippingAddress: ShippingAddress;
   products: Product[];
   subtotal: number;
   deliveryCharge: number;
@@ -59,13 +51,10 @@ interface OrderData {
 interface FormInputs {
   orderStatus: string;
   paymentStatus: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   phone: string;
   email: string;
-  street: string;
-  city: string;
-  postalCode: string;
+  address: string;
   shippingMethod: string;
   courier: string;
   courierTrackingId: string;
@@ -90,13 +79,10 @@ const OrderDetailsPage = ({
     defaultValues: {
       orderStatus: orderData.orderStatus,
       paymentStatus: orderData.paymentStatus,
-      firstName: orderData.customerInfo.firstName,
-      lastName: orderData.customerInfo.lastName,
+      fullName: orderData.customerInfo.fullName,
       phone: orderData.customerInfo.phone,
       email: orderData.customerInfo.email,
-      street: orderData.shippingAddress.street,
-      city: orderData.shippingAddress.city,
-      postalCode: orderData.shippingAddress.postalCode,
+      address: orderData.customerInfo.address,
       shippingMethod: orderData.deliveryMethod,
       courier: "",
       courierTrackingId: "",
@@ -226,16 +212,10 @@ const OrderDetailsPage = ({
         ...data,
         products,
         customerInfo: {
-          firstName: data.firstName,
-          lastName: data.lastName,
+          fullName: data.fullName,
           phone: data.phone,
           email: data.email,
-        },
-        shippingAddress: {
-          ...orderData.shippingAddress,
-          street: data.street,
-          city: data.city,
-          postalCode: data.postalCode,
+          address: data.address,
         },
       };
 
@@ -454,36 +434,21 @@ const OrderDetailsPage = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  First Name
+                  Full Name
                 </label>
                 <Controller
-                  name="firstName"
+                  name="fullName"
                   control={control}
                   render={({ field }) => (
                     <input
                       {...field}
                       type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
                     />
                   )}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Last Name
-                </label>
-                <Controller
-                  name="lastName"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  )}
-                />
-              </div>
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Phone
@@ -495,12 +460,13 @@ const OrderDetailsPage = ({
                     <input
                       {...field}
                       type="tel"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
                     />
                   )}
                 />
               </div>
-              <div>
+
+              <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email
                 </label>
@@ -511,7 +477,7 @@ const OrderDetailsPage = ({
                     <input
                       {...field}
                       type="email"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
                     />
                   )}
                 />
@@ -522,58 +488,20 @@ const OrderDetailsPage = ({
           {/* Shipping Address */}
           <div className="mb-8 border-t border-gray-200 pt-8">
             <h3 className="text-lg font-bold text-gray-900 mb-6">
-              Shipping Address
+              Address
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Street
-                </label>
-                <Controller
-                  name="street"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  )}
+
+            <Controller
+              name="address"
+              control={control}
+              render={({ field }) => (
+                <textarea
+                  {...field}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary resize-none"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  City
-                </label>
-                <Controller
-                  name="city"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  )}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Postal Code
-                </label>
-                <Controller
-                  name="postalCode"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  )}
-                />
-              </div>
-            </div>
+              )}
+            />
           </div>
 
           {/* Shipping & Courier Details */}

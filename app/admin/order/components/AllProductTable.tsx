@@ -48,6 +48,7 @@ interface OrderProduct {
   price: number;
   subtotal: number;
   variant: OrderVariant;
+  sku: string;
 }
 export interface Order {
   _id: string;
@@ -209,60 +210,63 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               Order Items
             </h3>
             <div className="space-y-3">
-              {order.products.map((product, idx) => (
-                <div
-                  key={idx}
-                  className="bg-gray-50 p-4 rounded-lg border border-gray-200"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                    <div>
-                      <p className="text-xs text-gray-600 font-semibold mb-1">
-                        PRODUCT
-                      </p>
-                      <p className="font-semibold text-gray-900">
-                        {product.title}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {product.slug}
+              {order.products.map((product, idx) => {
+                console.log(product);
+                return (
+                  <div
+                    key={idx}
+                    className="bg-gray-50 p-4 rounded-lg border border-gray-200"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                      <div>
+                        <p className="text-xs text-gray-600 font-semibold mb-1">
+                          PRODUCT
+                        </p>
+                        <p className="font-semibold text-gray-900">
+                          {product.title}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {product.slug}
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold mb-1">
+                            SKU
+                          </p>
+                          <p className="font-mono text-sm font-semibold text-gray-900">
+                            {product.sku}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold mb-1">
+                            QTY
+                          </p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            {product.quantity}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold mb-1">
+                            SUBTOTAL
+                          </p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            ৳{product.subtotal.toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-600 pt-3 border-t border-gray-200">
+                      <p className="font-semibold">
+                        Variant:{" "}
+                        {Object.entries(product.variant)
+                          .map(([k, v]) => `${k}: ${v}`)
+                          .join(", ")}
                       </p>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
-                      <div>
-                        <p className="text-xs text-gray-600 font-semibold mb-1">
-                          SKU
-                        </p>
-                        <p className="font-mono text-sm font-semibold text-gray-900">
-                          {product.variant.sku}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-600 font-semibold mb-1">
-                          QTY
-                        </p>
-                        <p className="text-lg font-semibold text-gray-900">
-                          {product.quantity}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-600 font-semibold mb-1">
-                          SUBTOTAL
-                        </p>
-                        <p className="text-lg font-semibold text-gray-900">
-                          ৳{product.subtotal.toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 pt-3 border-t border-gray-200">
-                    <p className="font-semibold">
-                      Variant:{" "}
-                      {Object.entries(product.variant)
-                        .map(([k, v]) => `${k}: ${v}`)
-                        .join(", ")}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -445,7 +449,7 @@ const AllProductTable = ({
 
   const handlePrint = (order: Order): void => {
     const logoUrl =
-      "https://res.cloudinary.com/dqyfwfeed/image/upload/v1768827949/cc8lg5jdyacwfecagecg.png";
+      "https://res.cloudinary.com/dqyfwfeed/image/upload/v1772005806/lipcetfjdhlivywajds5.png";
     const printWindow = window.open("", "_blank");
     if (printWindow) {
       printWindow.document.write(
@@ -596,178 +600,184 @@ const AllProductTable = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {orders?.map((order) => (
-                  <tr
-                    key={order._id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedOrderIds.includes(order._id)}
-                        onChange={() =>
-                          toggleOrderSelection(order._id)
-                        }
-                      />
-                    </td>
+                {orders?.map((order) => {
+                  return (
+                    <tr
+                      key={order._id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedOrderIds.includes(
+                            order._id,
+                          )}
+                          onChange={() =>
+                            toggleOrderSelection(order._id)
+                          }
+                        />
+                      </td>
 
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-gray-900">
-                        {order.customerInfo.fullName}
-                      </div>
-                      {/* <div className="text-xs text-gray-500">
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-semibold text-gray-900">
+                          {order.customerInfo.fullName}
+                        </div>
+                        {/* <div className="text-xs text-gray-500">
                         {order.customerInfo.email}
                       </div> */}
-                    </td>
-                    {/* <td className="px-6 py-4">
+                      </td>
+                      {/* <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 max-w-xs truncate">
                         {getFullAddress(order.shippingAddress)}
                       </div>
                     </td> */}
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">
-                        {order.products[0]?.title}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {order.products.length > 1 &&
-                          `+${order.products.length - 1} more`}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-mono text-gray-900">
-                        {order.products[0]?.variant.sku}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-gray-900">
-                        {order.products.reduce(
-                          (sum, p) => sum + p.quantity,
-                          0,
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-gray-900">
-                        ৳{order.grandTotal?.toFixed(2)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-600">
-                        {formatDate(order.createdAt)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <Badge
-                          className={`text-xs flex justify-center ${getOrderStatusClass(
-                            order.orderStatus,
-                          )}`}
-                        >
-                          {order.orderStatus}
-                        </Badge>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <Badge
-                          className={`text-xs flex justify-center ${getOrderStatusClass(
-                            order.FakeOrderStatus,
-                          )}`}
-                        >
-                          {order.FakeOrderStatus}
-                        </Badge>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <Badge
-                          className={`text-xs flex justify-center ${getOrderStatusClass(
-                            order.orderStatus ? "TRUE" : "FALSE",
-                          )}`}
-                        >
-                          {order.isEmailVerified ? "True" : "False"}
-                        </Badge>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="flex flex-col justify-center items-center gap-1">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            order.paymentStatus === "pending"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {order.paymentStatus || "pending"}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedOrder(order);
-                            setOrderModalOpen(true);
-                          }}
-                          className="p-2 hover:bg-blue-50 rounded-lg text-primary"
-                          title="View"
-                        >
-                          <Eye size={18} />
-                        </button>
-                        <Link href={`/admin/order/edit/${order._id}`}>
-                          <button
-                            // onClick={() => alert("Edit coming soon")}
-                            className="p-2 hover:bg-green-50 rounded-lg text-green-600"
-                            title="Edit"
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-medium text-gray-900">
+                          {order.products[0]?.title}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {order.products.length > 1 &&
+                            `+${order.products.length - 1} more`}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-mono text-gray-900">
+                          {order.products[0]?.sku}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-semibold text-gray-900">
+                          {order.products.reduce(
+                            (sum, p) => sum + p.quantity,
+                            0,
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-semibold text-gray-900">
+                          ৳{order.grandTotal?.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-600">
+                          {formatDate(order.createdAt)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1">
+                          <Badge
+                            className={`text-xs flex justify-center ${getOrderStatusClass(
+                              order.orderStatus,
+                            )}`}
                           >
-                            <Edit2 size={18} />
-                          </button>
-                        </Link>
-                        <button
-                          onClick={() => handlePrint(order)}
-                          className="p-2 hover:bg-purple-50 rounded-lg text-purple-600"
-                          title="Print"
-                        >
-                          <Printer size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(order._id)}
-                          className="p-2 hover:bg-red-50 rounded-lg text-red-600"
-                          title="Delete"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-
-                        <Link
-                          href={`/admin/order/history/${order.customerInfo.phone}`}
-                        >
+                            {order.orderStatus}
+                          </Badge>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1">
+                          <Badge
+                            className={`text-xs flex justify-center ${getOrderStatusClass(
+                              order.FakeOrderStatus,
+                            )}`}
+                          >
+                            {order.FakeOrderStatus}
+                          </Badge>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1">
+                          <Badge
+                            className={`text-xs flex justify-center ${getOrderStatusClass(
+                              order.orderStatus ? "TRUE" : "FALSE",
+                            )}`}
+                          >
+                            {order.isEmailVerified ? "True" : "False"}
+                          </Badge>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col justify-center items-center gap-1">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              order.paymentStatus === "pending"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {order.paymentStatus || "pending"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
                           <button
-                            // onClick={() => handleDelete(order._id)}
+                            onClick={() => {
+                              setSelectedOrder(order);
+                              setOrderModalOpen(true);
+                            }}
+                            className="p-2 hover:bg-blue-50 rounded-lg text-primary"
+                            title="View"
+                          >
+                            <Eye size={18} />
+                          </button>
+                          <Link
+                            href={`/admin/order/edit/${order._id}`}
+                          >
+                            <button
+                              // onClick={() => alert("Edit coming soon")}
+                              className="p-2 hover:bg-green-50 rounded-lg text-green-600"
+                              title="Edit"
+                            >
+                              <Edit2 size={18} />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={() => handlePrint(order)}
+                            className="p-2 hover:bg-purple-50 rounded-lg text-purple-600"
+                            title="Print"
+                          >
+                            <Printer size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(order._id)}
                             className="p-2 hover:bg-red-50 rounded-lg text-red-600"
                             title="Delete"
                           >
-                            <History size={18} />
+                            <Trash2 size={18} />
                           </button>
-                        </Link>
-                        <button
-                          disabled={!!order?.courier}
-                          onClick={() => {
-                            setCourierModalOpen(true);
-                            setSelectedOrder(order);
-                          }}
-                          className={`p-2 hover:bg-green-50 rounded-lg ${!!order.courier ? "text-gray-600" : "text-green-600"}`}
-                          title={
-                            !!order.courier
-                              ? "Already Assigned"
-                              : "Assign to courier"
-                          }
-                        >
-                          <Send size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+
+                          <Link
+                            href={`/admin/order/history/${order.customerInfo.phone}`}
+                          >
+                            <button
+                              // onClick={() => handleDelete(order._id)}
+                              className="p-2 hover:bg-red-50 rounded-lg text-red-600"
+                              title="Delete"
+                            >
+                              <History size={18} />
+                            </button>
+                          </Link>
+                          <button
+                            disabled={!!order?.courier}
+                            onClick={() => {
+                              setCourierModalOpen(true);
+                              setSelectedOrder(order);
+                            }}
+                            className={`p-2 hover:bg-green-50 rounded-lg ${!!order.courier ? "text-gray-600" : "text-green-600"}`}
+                            title={
+                              !!order.courier
+                                ? "Already Assigned"
+                                : "Assign to courier"
+                            }
+                          >
+                            <Send size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -775,148 +785,154 @@ const AllProductTable = ({
 
         {/* Mobile & Tablet Cards */}
         <div className="lg:hidden space-y-4">
-          {orders?.map((order) => (
-            <div
-              key={order._id}
-              className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
-            >
-              <div className="p-4 md:p-6">
-                <div className="mb-4 pb-4 border-b border-gray-200">
-                  <h3 className="text-base font-semibold text-gray-900">
-                    {order.customerInfo.fullName}
-                  </h3>
-                  <p className="text-xs md:text-sm text-gray-600 mt-1">
-                    {order.customerInfo.email}
-                  </p>
-                </div>
+          {orders?.map((order) => {
+            return (
+              <div
+                key={order._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+              >
+                <div className="p-4 md:p-6">
+                  <div className="mb-4 pb-4 border-b border-gray-200">
+                    <h3 className="text-base font-semibold text-gray-900">
+                      {order.customerInfo.fullName}
+                    </h3>
+                    <p className="text-xs md:text-sm text-gray-600 mt-1">
+                      {order.customerInfo.email}
+                    </p>
+                  </div>
 
-                <div className="mb-4 pb-4 border-b border-gray-200">
-                  <p className="text-xs font-semibold text-gray-700 mb-1">
-                    📍 LOCATION
-                  </p>
-                  <p className="text-sm text-gray-900">
-                    {getFullAddress(order)}
-                  </p>
-                </div>
+                  <div className="mb-4 pb-4 border-b border-gray-200">
+                    <p className="text-xs font-semibold text-gray-700 mb-1">
+                      📍 LOCATION
+                    </p>
+                    <p className="text-sm text-gray-900">
+                      {getFullAddress(order)}
+                    </p>
+                  </div>
 
-                <div className="mb-4 pb-4 border-b border-gray-200 space-y-2">
-                  {order.products.map((product, idx) => (
-                    <div key={idx}>
-                      <p className="text-xs font-semibold text-gray-700 mb-1">
-                        PRODUCT {idx + 1}
-                      </p>
-                      <p className="text-sm font-medium text-gray-900">
-                        {product.title}
-                      </p>
-                      <div className="grid grid-cols-3 gap-2 mt-2 text-xs">
-                        <div>
-                          <p className="text-gray-600">SKU</p>
-                          <p className="font-mono font-semibold text-gray-900">
-                            {product.variant.sku}
+                  <div className="mb-4 pb-4 border-b border-gray-200 space-y-2">
+                    {order.products.map((product, idx) => {
+                      return (
+                        <div key={idx}>
+                          <p className="text-xs font-semibold text-gray-700 mb-1">
+                            PRODUCT {idx + 1}
                           </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-600">Qty</p>
-                          <p className="font-semibold text-gray-900">
-                            {product.quantity}
+                          <p className="text-sm font-medium text-gray-900">
+                            {product.title}
                           </p>
+                          <div className="grid grid-cols-3 gap-2 mt-2 text-xs">
+                            <div>
+                              <p className="text-gray-600">SKU</p>
+                              <p className="font-mono font-semibold text-gray-900">
+                                {product.sku}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-gray-600">Qty</p>
+                              <p className="font-semibold text-gray-900">
+                                {product.quantity}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-gray-600">
+                                Subtotal
+                              </p>
+                              <p className="font-semibold text-gray-900">
+                                ৳{product.subtotal}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-gray-600">Subtotal</p>
-                          <p className="font-semibold text-gray-900">
-                            ৳{product.subtotal}
-                          </p>
-                        </div>
-                      </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mb-4 pb-4 border-b border-gray-200 space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">
+                        Total:
+                      </span>
+                      <span className="text-lg font-semibold text-gray-900">
+                        ৳{order.grandTotal?.toFixed(2)}
+                      </span>
                     </div>
-                  ))}
-                </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Date:</span>
+                      <span className="text-gray-900">
+                        {formatDate(order.createdAt)}
+                      </span>
+                    </div>
+                  </div>
 
-                <div className="mb-4 pb-4 border-b border-gray-200 space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">
-                      Total:
+                  <div className="mb-4 flex gap-2">
+                    <span
+                      className={`flex-1 text-center py-1 rounded text-xs font-semibold ${
+                        order.orderStatus === "pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
+                    >
+                      {order.orderStatus || "pending"}
                     </span>
-                    <span className="text-lg font-semibold text-gray-900">
-                      ৳{order.grandTotal?.toFixed(2)}
+                    <span
+                      className={`flex-1 text-center py-1 rounded text-xs font-semibold ${
+                        order.paymentStatus === "pending"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
+                    >
+                      {order.paymentStatus || "pending"}
                     </span>
                   </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600">Date:</span>
-                    <span className="text-gray-900">
-                      {formatDate(order.createdAt)}
-                    </span>
+
+                  <div className="grid grid-cols-5 gap-2">
+                    <button
+                      onClick={() => setSelectedOrder(order)}
+                      className="py-2 bg-blue-50 text-primary rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center justify-center"
+                    >
+                      <Eye size={16} />
+                    </button>
+                    <button
+                      onClick={() => alert("Edit coming soon")}
+                      className="py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium flex items-center justify-center"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button
+                      onClick={() => handlePrint(order)}
+                      className="py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium flex items-center justify-center"
+                    >
+                      <Printer size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(order._id)}
+                      className="py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center justify-center"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                    <button
+                      // onClick={() => handleDelete(order._id)}
+                      className="py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center justify-center"
+                      title="Delete"
+                    >
+                      <History size={18} />
+                    </button>
+                    <button
+                      disabled={!!order?.courier}
+                      onClick={() => {
+                        setCourierModalOpen(true);
+                        setSelectedOrder(order);
+                      }}
+                      className="p-2 hover:bg-green-50 rounded-lg text-green-600"
+                      title="Assign to courier"
+                    >
+                      <Send size={18} />
+                    </button>
                   </div>
-                </div>
-
-                <div className="mb-4 flex gap-2">
-                  <span
-                    className={`flex-1 text-center py-1 rounded text-xs font-semibold ${
-                      order.orderStatus === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
-                  >
-                    {order.orderStatus || "pending"}
-                  </span>
-                  <span
-                    className={`flex-1 text-center py-1 rounded text-xs font-semibold ${
-                      order.paymentStatus === "pending"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
-                  >
-                    {order.paymentStatus || "pending"}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-5 gap-2">
-                  <button
-                    onClick={() => setSelectedOrder(order)}
-                    className="py-2 bg-blue-50 text-primary rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center justify-center"
-                  >
-                    <Eye size={16} />
-                  </button>
-                  <button
-                    onClick={() => alert("Edit coming soon")}
-                    className="py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium flex items-center justify-center"
-                  >
-                    <Edit2 size={16} />
-                  </button>
-                  <button
-                    onClick={() => handlePrint(order)}
-                    className="py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium flex items-center justify-center"
-                  >
-                    <Printer size={16} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(order._id)}
-                    className="py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center justify-center"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                  <button
-                    // onClick={() => handleDelete(order._id)}
-                    className="py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center justify-center"
-                    title="Delete"
-                  >
-                    <History size={18} />
-                  </button>
-                  <button
-                    disabled={!!order?.courier}
-                    onClick={() => {
-                      setCourierModalOpen(true);
-                      setSelectedOrder(order);
-                    }}
-                    className="p-2 hover:bg-green-50 rounded-lg text-green-600"
-                    title="Assign to courier"
-                  >
-                    <Send size={18} />
-                  </button>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
