@@ -280,14 +280,12 @@ export default function CheckoutForm() {
           icon: "success",
         });
 
-        router.push(
-          `/thank-you?orderId=${response.data.orderId}&amount=${grandTotal}&paymentMethod=${paymentMethod}`,
-        );
-
         clearCart();
 
         if (paymentMethod === "cash") {
-          router.push("/");
+          router.push(
+            `/thank-you?orderId=${response.data.orderId}&amount=${grandTotal}&paymentMethod=${paymentMethod}`,
+          );
           return;
         }
 
@@ -295,6 +293,10 @@ export default function CheckoutForm() {
           orderId: response.data.orderId,
           amount: grandTotal,
         });
+
+        /* router.push(
+          `/thank-you?orderId=${response.data.orderId}&amount=${grandTotal}&paymentMethod=${paymentMethod}`,
+        ); */
       }
     } catch (error: any) {
       console.error("Order submission error:", error);
