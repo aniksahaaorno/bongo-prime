@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { fbEvent } from "@/utils/fbPixel";
 import { handleWhatsApp } from "./handleWhatsApp";
 import { ProductFormData } from "@/utils/product";
+import axios from "axios";
 
 interface Variant {
   color: string;
@@ -100,7 +101,7 @@ export default function ProductVariant({
   const handleDecrease = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedVariant) {
       alert("Please select a variant");
       return;
@@ -127,13 +128,28 @@ export default function ProductVariant({
       return;
     }
 
-    fbEvent("AddToCart", {
+    /* fbEvent("AddToCart", {
       content_ids: [cartItem.sku || cartItem.slug],
       content_type: "product",
       content_name: cartItem.title,
       value: cartItem.productPrice,
       currency: "BDT",
-    });
+    }); */
+
+    const cartPixelData = {
+      content_ids: [cartItem.sku || cartItem.slug],
+      content_type: "product",
+      content_name: cartItem.title,
+      value: cartItem.productPrice,
+      currency: "BDT",
+    };
+
+    const cartPixelResponse = await axios.post(
+      `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/add-to-cart-pixel-request`,
+      cartPixelData,
+    );
+
+    console.log(cartPixelResponse);
 
     toast.success("Product added successfully");
     onCloseModal?.();
