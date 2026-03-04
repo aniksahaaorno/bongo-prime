@@ -97,7 +97,18 @@ export default function ProductVariant({
   const [quantity, setQuantity] = useState(1);
 
   //   increase or decrease the quantity of product
-  const handleIncrease = () => setQuantity((prev) => prev + 1);
+  const handleIncrease = () => {
+    setQuantity((prev) => {
+      if (prev < (selectedVariant?.stock ?? 0)) {
+        return prev + 1;
+      }
+
+      toast.error("Can not add more item than quantity!");
+
+      return prev;
+    });
+  };
+
   const handleDecrease = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
@@ -148,8 +159,6 @@ export default function ProductVariant({
       `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/add-to-cart-pixel-request`,
       cartPixelData,
     );
-
-    console.log(cartPixelResponse);
 
     toast.success("Product added successfully");
     onCloseModal?.();

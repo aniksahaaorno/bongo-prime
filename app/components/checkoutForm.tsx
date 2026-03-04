@@ -61,7 +61,7 @@ export default function CheckoutForm() {
   const [deliveryMethod, setDeliveryMethod] = useState("inside");
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [fraudState, setFraudState] = useState<IFrodState>({
+  /* const [fraudState, setFraudState] = useState<IFrodState>({
     invalidCount: 0,
     invalidFields: [],
     fieldErrorCount: {
@@ -70,7 +70,7 @@ export default function CheckoutForm() {
       email: 0,
       address: 0,
     },
-  });
+  }); */
 
   /* useEffect(() => {
     const saveFraudData = async () => {
@@ -85,7 +85,7 @@ export default function CheckoutForm() {
     }
   }, [fraudState]); */
 
-  let localInvalidCount = 0;
+  /* let localInvalidCount = 0;
   let localInvalidFields: string[] = [];
 
   function markLocal(field: string) {
@@ -93,7 +93,7 @@ export default function CheckoutForm() {
     if (!localInvalidFields.includes(field)) {
       localInvalidFields.push(field);
     }
-  }
+  } */
 
   const handleInputChange = (
     e: React.ChangeEvent<
