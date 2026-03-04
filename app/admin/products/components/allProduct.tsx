@@ -9,6 +9,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useAuth } from "@/app/context/AuthContext";
 
 // ============ TYPE DEFINITIONS ============
 interface Discount {
@@ -179,7 +180,6 @@ const EditModal: React.FC<EditModalProps> = ({
     setVariants((prev) => {
       const updated = [...prev];
 
-      // ✅ COLOR CHANGE
       if (field === "color") {
         updated[variantIndex].color = value;
 
@@ -191,12 +191,10 @@ const EditModal: React.FC<EditModalProps> = ({
         );
       }
 
-      // ✅ VARIANT PRICE CHANGE (moved outside)
       if (field === "price" && sizeIndex === null) {
         updated[variantIndex].price = value;
       }
 
-      // ✅ SIZE LEVEL CHANGES
       if (sizeIndex !== null) {
         const sizeObj = updated[variantIndex].sizes[sizeIndex];
 
@@ -254,7 +252,7 @@ const EditModal: React.FC<EditModalProps> = ({
       ...prev,
       {
         color: "",
-        price: "", // ✅ added here
+        price: "",
         sizes: [
           {
             size: "",
@@ -795,6 +793,8 @@ const ProductTable = ({
   const [editingProduct, setEditingProduct] =
     useState<Product | null>(null);
 
+  const { user } = useAuth();
+
   const handleStatusToggle = (id: string, status: any): void => {
     setProducts((prev) =>
       prev.map((p) =>
@@ -825,7 +825,7 @@ const ProductTable = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ ...formData, user }),
         },
       );
 
@@ -849,40 +849,6 @@ const ProductTable = ({
     }
   };
 
-  const handleSaveEdit = (data: EditFormData): void => {
-    if (editingProduct) {
-      setProducts(
-        products.map((p) =>
-          p._id === editingProduct._id
-            ? {
-                ...p,
-                title: data.title,
-                slug: data.slug,
-                description: data.description,
-                shortDescription: data.shortDescription,
-                basePrice: data.basePrice,
-                discount: {
-                  type: data.discountType,
-                  value: data.discountValue,
-                },
-                sku: data.sku,
-                stockQuantity: data.stockQuantity,
-                stockStatus: data.stockStatus,
-                category: data.category,
-              }
-            : p,
-        ),
-      );
-      setEditingProduct(null);
-    }
-  };
-
-  // const handleDelete = (id: string): void => {
-  //   if (window.confirm("Are you sure you want to delete this product?")) {
-  //     setProducts(products.filter((p) => p._id !== id));
-  //   }
-  // };
-
   const handleDelete = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -899,6 +865,7 @@ const ProductTable = ({
             `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/api/products/primary-delete/${id}`,
             {
               isDeleted: false,
+              user,
             },
           );
 

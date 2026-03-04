@@ -297,6 +297,8 @@ export default function CheckoutForm() {
         /* router.push(
           `/thank-you?orderId=${response.data.orderId}&amount=${grandTotal}&paymentMethod=${paymentMethod}`,
         ); */
+      } else {
+        toast.error(response.data.message)
       }
     } catch (error: any) {
       console.error("Order submission error:", error);

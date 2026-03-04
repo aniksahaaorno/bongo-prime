@@ -7,6 +7,7 @@ import axios from "axios";
 import config from "@/lib/config";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
+import { useAuth } from "@/app/context/AuthContext";
 
 // Types
 interface Variant {
@@ -91,6 +92,8 @@ const OrderDetailsPage = ({
     },
   });
 
+  const { user } = useAuth();
+
   // const handleDeleteProduct = (productId: string): void => {
   //   setProducts(products.filter((p) => p.productId !== productId));
   // };
@@ -109,6 +112,11 @@ const OrderDetailsPage = ({
         try {
           const response = await axios.delete(
             `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/delete-order/${id}`,
+            {
+              data: {
+                user,
+              },
+            },
           );
 
           if (response.status === 200) {
@@ -222,7 +230,7 @@ const OrderDetailsPage = ({
     try {
       const res = await axios.put(
         `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/update-order/${orderData._id}`,
-        updatedOrderData,
+        { ...updatedOrderData, user },
       );
       if (res.data.success) {
         toast.success("Order updated successfully!");

@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { getOrderStatusClass } from "./OrdersTable";
 import axios from "axios";
 import { toast } from "sonner";
+import { useAuth } from "@/app/context/AuthContext";
 
 // ============ TYPE DEFINITIONS ============
 interface CustomerInfo {
@@ -407,6 +408,8 @@ const AllProductTable = ({
   const [orderModalOpen, setOrderModalOpen] = useState(false);
   const [courierModalOpen, setCourierModalOpen] = useState(false);
 
+  const { user } = useAuth();
+
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -424,6 +427,9 @@ const AllProductTable = ({
     try {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/create-order/delete-order/${id}`,
+        {
+          data: { user },
+        },
       );
 
       if (response.status === 200) {
