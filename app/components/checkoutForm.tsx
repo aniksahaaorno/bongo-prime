@@ -72,7 +72,7 @@ export default function CheckoutForm() {
     },
   });
 
-  useEffect(() => {
+  /* useEffect(() => {
     const saveFraudData = async () => {
       await axios.put(
         `${process.env.NEXT_PUBLIC_EXPRESS_SERVER_BASE_URL}/api/update-fraud-user`,
@@ -83,7 +83,7 @@ export default function CheckoutForm() {
     if (fraudState.invalidCount > 0) {
       saveFraudData();
     }
-  }, [fraudState]);
+  }, [fraudState]); */
 
   let localInvalidCount = 0;
   let localInvalidFields: string[] = [];
@@ -158,56 +158,56 @@ export default function CheckoutForm() {
     e.preventDefault();
 
     // reset local counters each submit
-    localInvalidCount = 0;
-    localInvalidFields = [];
+    // localInvalidCount = 0;
+    // localInvalidFields = [];
 
     // Fraud validation
 
-    if (!fraudRoles.isValidBDPhone(formData.phoneNumber)) {
-      markLocal("phone");
-    }
+    // if (!fraudRoles.isValidBDPhone(formData.phoneNumber)) {
+    //   markLocal("phone");
+    // }
 
-    if (!fraudRoles.isValidEmail(formData.email)) {
-      markLocal("email");
-    }
+    // if (!fraudRoles.isValidEmail(formData.email)) {
+    //   markLocal("email");
+    // }
 
-    if (!fraudRoles.isValidAddress(formData.fullAddress)) {
-      markLocal("address");
-    }
+    // if (!fraudRoles.isValidAddress(formData.fullAddress)) {
+    //   markLocal("address");
+    // }
 
-    // update fraud state
-    setFraudState((prev) => ({
-      ...prev,
-      invalidCount: prev.invalidCount + localInvalidCount,
-      invalidFields: [
-        ...new Set([...prev.invalidFields, ...localInvalidFields]),
-      ],
-      fieldErrorCount: {
-        ...prev.fieldErrorCount,
-        name:
-          prev.fieldErrorCount.name +
-          (localInvalidFields.includes("name") ? 1 : 0),
-        phone:
-          prev.fieldErrorCount.phone +
-          (localInvalidFields.includes("phone") ? 1 : 0),
-        email:
-          prev.fieldErrorCount.email +
-          (localInvalidFields.includes("email") ? 1 : 0),
-        address:
-          prev.fieldErrorCount.address +
-          (localInvalidFields.includes("address") ? 1 : 0),
-      },
-    }));
+    // // update fraud state
+    // setFraudState((prev) => ({
+    //   ...prev,
+    //   invalidCount: prev.invalidCount + localInvalidCount,
+    //   invalidFields: [
+    //     ...new Set([...prev.invalidFields, ...localInvalidFields]),
+    //   ],
+    //   fieldErrorCount: {
+    //     ...prev.fieldErrorCount,
+    //     name:
+    //       prev.fieldErrorCount.name +
+    //       (localInvalidFields.includes("name") ? 1 : 0),
+    //     phone:
+    //       prev.fieldErrorCount.phone +
+    //       (localInvalidFields.includes("phone") ? 1 : 0),
+    //     email:
+    //       prev.fieldErrorCount.email +
+    //       (localInvalidFields.includes("email") ? 1 : 0),
+    //     address:
+    //       prev.fieldErrorCount.address +
+    //       (localInvalidFields.includes("address") ? 1 : 0),
+    //   },
+    // }));
 
-    if (localInvalidCount > 0) {
-      toast.error(
-        `Invalid field${localInvalidCount > 1 ? "s" : ""}: ${localInvalidFields.join(", ")}`,
-      );
-      return;
-    }
+    // if (localInvalidCount > 0) {
+    //   toast.error(
+    //     `Invalid field${localInvalidCount > 1 ? "s" : ""}: ${localInvalidFields.join(", ")}`,
+    //   );
+    //   return;
+    // }
 
     // Required check
-    const requiredFields: (keyof typeof formData)[] = [
+    /* const requiredFields: (keyof typeof formData)[] = [
       "fullName",
       "phoneNumber",
       "email",
@@ -221,7 +221,7 @@ export default function CheckoutForm() {
     if (missingField) {
       toast.error(`${missingField} is required`);
       return;
-    }
+    } */
 
     if (cartItems.length === 0) {
       toast.error("Cart is empty");

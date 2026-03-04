@@ -67,8 +67,6 @@ export interface Order {
   orderStatus?: "pending" | "confirmed" | "shipped" | "delivered";
   paymentStatus?: "pending" | "paid";
   courier?: {};
-  FakeOrderStatus: string;
-  isEmailVerified: boolean;
   customerIp: string;
 }
 
@@ -586,12 +584,6 @@ const AllProductTable = ({
                     Status
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                    Fraud Status
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                    isEmailVerification
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                     Payment Status
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
@@ -671,28 +663,6 @@ const AllProductTable = ({
                             )}`}
                           >
                             {order.orderStatus}
-                          </Badge>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-col gap-1">
-                          <Badge
-                            className={`text-xs flex justify-center ${getOrderStatusClass(
-                              order.FakeOrderStatus,
-                            )}`}
-                          >
-                            {order.FakeOrderStatus}
-                          </Badge>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-col gap-1">
-                          <Badge
-                            className={`text-xs flex justify-center ${getOrderStatusClass(
-                              order.orderStatus ? "TRUE" : "FALSE",
-                            )}`}
-                          >
-                            {order.isEmailVerified ? "True" : "False"}
                           </Badge>
                         </div>
                       </td>

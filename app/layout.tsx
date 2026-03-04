@@ -80,8 +80,8 @@ export default async function RootLayout({
           }}
         />
         <AuthProvider>
-          <TimeTracker />
-          <LocationTracker />
+          {/* <TimeTracker /> */}
+          {/* <LocationTracker /> */}
           {children}
           <ToastContainer />
           <Toaster
