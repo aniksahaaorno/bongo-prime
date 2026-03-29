@@ -10,18 +10,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Careers | Crab Fashion",
+  title: "Careers | Bongo Prime",
   description:
-    "Join Crab Fashion's creative team. Explore opportunities in fashion, marketing, design, and e-commerce.",
+    "Join Bongo Prime's creative team. Explore opportunities in fashion, marketing, design, and e-commerce.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/careers",
   },
   openGraph: {
-    title: "Careers | Crab Fashion",
+    title: "Careers | Bongo Prime",
     description:
       "Join our growing fashion team. Find opportunities in marketing, design, sales, and e-commerce operations.",
     url: "https://www.crabfashionbd.com/careers",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -68,11 +68,11 @@ export default function CareersPage() {
         {/* Header */}
         <header className="text-center mb-16">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
-            Careers at Crab Fashion
+            Careers at Bongo Prime
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            Join our team of creative, passionate individuals shaping the future
-            of fashion
+            Join our team of creative, passionate individuals shaping
+            the future of fashion
           </p>
         </header>
 
@@ -80,10 +80,10 @@ export default function CareersPage() {
         <section className="mb-16">
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-gray-700 text-lg leading-relaxed mb-8">
-              Crab Fashion is always looking for creative, motivated, and
-              passionate individuals to join our growing team. If you love
-              fashion, digital innovation, and customer excellence, we'd love to
-              hear from you!
+              Bongo Prime is always looking for creative, motivated,
+              and passionate individuals to join our growing team. If
+              you love fashion, digital innovation, and customer
+              excellence, we'd love to hear from you!
             </p>
           </div>
         </section>
@@ -105,7 +105,9 @@ export default function CareersPage() {
                 <h3 className="font-semibold text-gray-900 mb-2">
                   {benefit.title}
                 </h3>
-                <p className="text-gray-600 text-sm">{benefit.description}</p>
+                <p className="text-gray-600 text-sm">
+                  {benefit.description}
+                </p>
               </div>
             ))}
           </div>
@@ -115,13 +117,16 @@ export default function CareersPage() {
         <section className="mb-20">
           <div className="bg-linear-to-br from-blue-50 to-sky-50 rounded-2xl p-8 md:p-10">
             <div className="text-center mb-10">
-              <Briefcase className="mx-auto text-primary mb-4" size={32} />
+              <Briefcase
+                className="mx-auto text-primary mb-4"
+                size={32}
+              />
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">
                 Current Opportunities
               </h2>
               <p className="text-gray-600">
-                We welcome applications for creative roles in fashion and
-                e-commerce
+                We welcome applications for creative roles in fashion
+                and e-commerce
               </p>
             </div>
 
@@ -134,7 +139,9 @@ export default function CareersPage() {
                   >
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0" />
-                      <span className="text-gray-800 font-medium">{role}</span>
+                      <span className="text-gray-800 font-medium">
+                        {role}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -142,8 +149,8 @@ export default function CareersPage() {
 
               <div className="mt-10 text-center">
                 <p className="text-gray-700 mb-6">
-                  Don't see your dream role listed? Send us your CV anyway —
-                  we're always open to talented people!
+                  Don't see your dream role listed? Send us your CV
+                  anyway — we're always open to talented people!
                 </p>
               </div>
             </div>
@@ -184,22 +191,23 @@ export default function CareersPage() {
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">•</span>
                     <span>
-                      <strong>Subject Line:</strong> Job Application — [Position
-                      Name]
+                      <strong>Subject Line:</strong> Job Application —
+                      [Position Name]
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">•</span>
                     <span>
-                      <strong>Attachments:</strong> Resume/CV and Portfolio (if
-                      applicable)
+                      <strong>Attachments:</strong> Resume/CV and
+                      Portfolio (if applicable)
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">•</span>
                     <span>
-                      <strong>Note:</strong> We review every application and
-                      will contact qualified candidates
+                      <strong>Note:</strong> We review every
+                      application and will contact qualified
+                      candidates
                     </span>
                   </li>
                 </ul>
@@ -215,8 +223,8 @@ export default function CareersPage() {
               Ready to Join Our Fashion Journey?
             </h2>
             <p className="text-pink-100 mb-8 max-w-lg mx-auto">
-              Be part of a team that's redefining fashion e-commerce in
-              Bangladesh
+              Be part of a team that's redefining fashion e-commerce
+              in Bangladesh
             </p>
             <a
               href="mailto:careers@crabfashionbd.com?subject=General%20Job%20Application%20-%20Crab%20Fashion"

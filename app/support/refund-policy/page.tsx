@@ -14,18 +14,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | Crab Fashion",
+  title: "Refund Policy | Bongo Prime",
   description:
-    "Learn about Crab Fashion's refund policy, eligibility criteria, and refund process.",
+    "Learn about Bongo Prime's refund policy, eligibility criteria, and refund process.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/refund-policy",
   },
   openGraph: {
-    title: "Refund Policy | Crab Fashion",
+    title: "Refund Policy | Bongo Prime",
     description:
-      "Understand our refund process, eligibility, and timelines for returns at Crab Fashion.",
+      "Understand our refund process, eligibility, and timelines for returns at Bongo Prime.",
     url: "https://www.crabfashionbd.com/refund-policy",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -67,7 +67,8 @@ const validRefundReasons = [
   },
   {
     title: "Description Mismatch",
-    description: "Product significantly differs from online description",
+    description:
+      "Product significantly differs from online description",
   },
 ];
 
@@ -110,8 +111,8 @@ export default function RefundPolicyPage() {
             Refund Policy
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-            At Crab Fashion, we value our customers and strive to ensure
-            complete satisfaction with every purchase.
+            At Bongo Prime, we value our customers and strive to
+            ensure complete satisfaction with every purchase.
           </p>
         </header>
 
@@ -132,9 +133,13 @@ export default function RefundPolicyPage() {
               >
                 <div className="flex items-center gap-3 mb-4">
                   {item.icon}
-                  <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    {item.title}
+                  </h3>
                 </div>
-                <p className="text-gray-600 text-sm">{item.description}</p>
+                <p className="text-gray-600 text-sm">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
@@ -156,7 +161,10 @@ export default function RefundPolicyPage() {
               <div className="bg-white border border-gray-200 rounded-xl p-6">
                 <ul className="space-y-3">
                   {nonRefundableItems.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                    <li
+                      key={index}
+                      className="flex items-start gap-3"
+                    >
                       <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0" />
                       <span className="text-gray-700">{item}</span>
                     </li>
@@ -186,8 +194,9 @@ export default function RefundPolicyPage() {
                   <li className="flex items-start gap-3">
                     <span className="text-amber-600 mt-1">•</span>
                     <span>
-                      Crab Fashion reserves the right to approve or reject
-                      refund requests based on policy compliance
+                      Bongo Prime reserves the right to approve or
+                      reject refund requests based on policy
+                      compliance
                     </span>
                   </li>
                 </ul>
@@ -232,13 +241,14 @@ export default function RefundPolicyPage() {
                 <div className="space-y-4">
                   <div className="p-4 bg-white rounded-lg border border-green-100">
                     <p className="text-green-700 font-medium">
-                      Error from Crab Fashion: Full delivery charge refund
+                      Error from Bongo Prime: Full delivery charge
+                      refund
                     </p>
                   </div>
                   <div className="p-4 bg-white rounded-lg border border-gray-200">
                     <p className="text-gray-700">
-                      Customer preference (size, color, change of mind):
-                      Delivery charges non-refundable
+                      Customer preference (size, color, change of
+                      mind): Delivery charges non-refundable
                     </p>
                   </div>
                 </div>
@@ -266,7 +276,9 @@ export default function RefundPolicyPage() {
                   <h3 className="font-semibold text-gray-900 mb-2">
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <p className="text-gray-600 text-sm">
+                    {step.description}
+                  </p>
                 </div>
                 {step.step < 4 && (
                   <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gray-200" />
@@ -305,8 +317,10 @@ export default function RefundPolicyPage() {
               </h3>
               <p className="text-gray-700">
                 Refunds are issued via the{" "}
-                <span className="font-bold">original payment method</span> or as
-                store credit, as applicable.
+                <span className="font-bold">
+                  original payment method
+                </span>{" "}
+                or as store credit, as applicable.
               </p>
             </div>
           </div>
@@ -340,8 +354,8 @@ export default function RefundPolicyPage() {
             </div>
 
             <p className="text-gray-600 mt-6">
-              Contact us for refund-related queries or assistance with the
-              process
+              Contact us for refund-related queries or assistance with
+              the process
             </p>
           </div>
         </section>

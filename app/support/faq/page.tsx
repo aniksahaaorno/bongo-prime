@@ -15,18 +15,18 @@ import Link from "next/link";
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "FAQs | Crab Fashion",
+  title: "FAQs | Bongo Prime",
   description:
-    "Find answers to common questions about orders, delivery, payments, returns, and more at Crab Fashion.",
+    "Find answers to common questions about orders, delivery, payments, returns, and more at Bongo Prime.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/faq",
   },
   openGraph: {
-    title: "FAQs | Crab Fashion",
+    title: "FAQs | Bongo Prime",
     description:
-      "Get quick answers to frequently asked questions about shopping, delivery, returns, and customer support at Crab Fashion.",
+      "Get quick answers to frequently asked questions about shopping, delivery, returns, and customer support at Bongo Prime.",
     url: "https://www.crabfashionbd.com/faq",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -104,7 +104,8 @@ const faqCategories = [
           "Yes, we offer return or exchange within 7 days of delivery, subject to our Return & Exchange Policy. The product must be unused, unwashed, and in original condition with all tags attached.",
       },
       {
-        question: "Which items are not eligible for return or refund?",
+        question:
+          "Which items are not eligible for return or refund?",
         answer:
           "The following items are not eligible: • Discounted/sale items • Innerwear and accessories • Customized/personalized products • Items damaged due to customer misuse • Products without original tags and packaging",
       },
@@ -126,7 +127,8 @@ const faqCategories = [
     icon: <AlertTriangle className="text-blue-600" size={20} />,
     faqs: [
       {
-        question: "Will the product color be exactly the same as shown?",
+        question:
+          "Will the product color be exactly the same as shown?",
         answer:
           "Slight color variations may occur due to differences in lighting conditions and screen resolutions. This is normal and not considered a defect. For color accuracy, please refer to multiple product photos from different angles.",
       },
@@ -138,7 +140,7 @@ const faqCategories = [
       {
         question: "Are your products original?",
         answer:
-          "Yes! All products sold by Crab Fashion are 100% authentic and sourced directly from authorized suppliers and brands.",
+          "Yes! All products sold by Bongo Prime are 100% authentic and sourced directly from authorized suppliers and brands.",
       },
     ],
   },
@@ -148,7 +150,7 @@ const faqCategories = [
     icon: <MessageCircle className="text-blue-600" size={20} />,
     faqs: [
       {
-        question: "How can I contact Crab Fashion?",
+        question: "How can I contact Bongo Prime?",
         answer:
           "You can reach us through multiple channels: • Email: crabfashion@gmail.com • Phone/WhatsApp: +880 1706 310 521 • Facebook Messenger: @crabfashion • Business Hours: Sat-Thu, 10:00 AM – 8:00 PM",
       },
@@ -174,8 +176,8 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            Find quick answers to common questions about shopping with Crab
-            Fashion
+            Find quick answers to common questions about shopping with
+            Crab Fashion
           </p>
         </header>
 
@@ -204,8 +206,8 @@ export default function FAQPage() {
             </div>
           </div>
           <p className="text-center text-gray-500 text-sm mt-3">
-            Type keywords like "delivery", "return", "payment" to find specific
-            answers
+            Type keywords like "delivery", "return", "payment" to find
+            specific answers
           </p>
         </div>
 
@@ -262,8 +264,8 @@ export default function FAQPage() {
                 Still Have Questions?
               </h2>
               <p className="text-gray-700 max-w-2xl mx-auto">
-                Can't find what you're looking for? Our support team is ready to
-                help you.
+                Can't find what you're looking for? Our support team
+                is ready to help you.
               </p>
             </div>
 
@@ -278,7 +280,9 @@ export default function FAQPage() {
                     <h3 className="font-semibold text-gray-900">
                       Email Support
                     </h3>
-                    <p className="text-sm text-gray-600">24-hour response</p>
+                    <p className="text-sm text-gray-600">
+                      24-hour response
+                    </p>
                   </div>
                 </div>
                 <a
@@ -293,13 +297,18 @@ export default function FAQPage() {
               <div className="bg-white rounded-xl p-6 border border-blue-100">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <MessageCircle className="text-blue-600" size={24} />
+                    <MessageCircle
+                      className="text-blue-600"
+                      size={24}
+                    />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">
                       WhatsApp Chat
                     </h3>
-                    <p className="text-sm text-gray-600">Quick response</p>
+                    <p className="text-sm text-gray-600">
+                      Quick response
+                    </p>
                   </div>
                 </div>
                 <a
@@ -318,11 +327,15 @@ export default function FAQPage() {
               <div className="bg-white/80 rounded-xl p-6 border border-blue-100">
                 <div className="flex items-center gap-3 mb-3">
                   <Clock className="text-blue-600" size={20} />
-                  <h3 className="font-semibold text-gray-900">Support Hours</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Support Hours
+                  </h3>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Saturday – Thursday</span>
+                    <span className="text-gray-600">
+                      Saturday – Thursday
+                    </span>
                     <span className="font-medium text-gray-900 bg-blue-50 px-3 py-1 rounded-lg">
                       10:00 AM – 8:00 PM
                     </span>

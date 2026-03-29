@@ -14,18 +14,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Help Center | Crab Fashion",
+  title: "Help Center | Bongo Prime",
   description:
-    "Get support with orders, delivery, returns, payments, and more at Crab Fashion Help Center.",
+    "Get support with orders, delivery, returns, payments, and more at Bongo Prime Help Center.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/help-center",
   },
   openGraph: {
-    title: "Help Center | Crab Fashion",
+    title: "Help Center | Bongo Prime",
     description:
-      "Find answers to common questions about orders, shipping, returns, and customer support at Crab Fashion.",
+      "Find answers to common questions about orders, shipping, returns, and customer support at Bongo Prime.",
     url: "https://www.crabfashionbd.com/help-center",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -76,8 +76,8 @@ export default function HelpCenterPage() {
             Help Center
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            Need help? We're here for you. Find answers or contact our support
-            team.
+            Need help? We're here for you. Find answers or contact our
+            support team.
           </p>
         </header>
 
@@ -102,8 +102,12 @@ export default function HelpCenterPage() {
                     <Mail className="text-primary" size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Email</h3>
-                    <p className="text-sm text-gray-600">Direct support</p>
+                    <h3 className="font-semibold text-gray-900">
+                      Email
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Direct support
+                    </p>
                   </div>
                 </div>
                 <a
@@ -118,13 +122,18 @@ export default function HelpCenterPage() {
               <div className="bg-white rounded-xl p-6 border border-blue-100">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <MessageCircle className="text-primary" size={24} />
+                    <MessageCircle
+                      className="text-primary"
+                      size={24}
+                    />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">
                       Phone / WhatsApp
                     </h3>
-                    <p className="text-sm text-gray-600">Quick response</p>
+                    <p className="text-sm text-gray-600">
+                      Quick response
+                    </p>
                   </div>
                 </div>
                 <a
@@ -143,7 +152,9 @@ export default function HelpCenterPage() {
               <div className="bg-white/80 rounded-xl p-6 border border-blue-100">
                 <div className="flex items-center gap-3 mb-3">
                   <Clock className="text-primary" size={20} />
-                  <h3 className="font-semibold text-gray-900">Support Hours</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Support Hours
+                  </h3>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -154,7 +165,9 @@ export default function HelpCenterPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Friday</span>
-                    <span className="font-medium text-gray-900">Closed</span>
+                    <span className="font-medium text-gray-900">
+                      Closed
+                    </span>
                   </div>
                 </div>
               </div>
@@ -180,7 +193,9 @@ export default function HelpCenterPage() {
                 <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
                   {topic.title}
                 </h3>
-                <p className="text-gray-600 text-sm">{topic.description}</p>
+                <p className="text-gray-600 text-sm">
+                  {topic.description}
+                </p>
               </a>
             ))}
           </div>
@@ -208,7 +223,9 @@ export default function HelpCenterPage() {
                 href="/policies/refund"
                 className="text-center px-4 py-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
               >
-                <span className="text-primary font-medium">Refund Policy</span>
+                <span className="text-primary font-medium">
+                  Refund Policy
+                </span>
               </a>
               <a
                 href="/policies/shipping"
@@ -224,10 +241,12 @@ export default function HelpCenterPage() {
 
         {/* Quick Contact */}
         <section className="rounded-2xl bg-linear-to-r from-primary to-blue-400 p-10 text-white text-center">
-          <h2 className="text-2xl font-semibold mb-4">Still Need Help?</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            Still Need Help?
+          </h2>
           <p className="text-blue-100 mb-8 max-w-md mx-auto">
-            Our dedicated support team is ready to assist you with any questions
-            or concerns.
+            Our dedicated support team is ready to assist you with any
+            questions or concerns.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a

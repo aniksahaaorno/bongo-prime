@@ -16,18 +16,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Crab Fashion",
+  title: "Privacy Policy | Bongo Prime",
   description:
-    "Learn how Crab Fashion collects, uses, and protects your personal information.",
+    "Learn how Bongo Prime collects, uses, and protects your personal information.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/privacy-policy",
   },
   openGraph: {
-    title: "Privacy Policy | Crab Fashion",
+    title: "Privacy Policy | Bongo Prime",
     description:
-      "Understand how we handle your data and protect your privacy at Crab Fashion.",
+      "Understand how we handle your data and protect your privacy at Bongo Prime.",
     url: "https://www.crabfashionbd.com/privacy-policy",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -89,9 +89,9 @@ export default function PrivacyPolicyPage() {
             Privacy Policy
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            At Crab Fashion, we respect and protect your privacy. This policy
-            explains how we collect, use, and safeguard your personal
-            information.
+            At Bongo Prime, we respect and protect your privacy. This
+            policy explains how we collect, use, and safeguard your
+            personal information.
           </p>
         </header>
 
@@ -106,8 +106,8 @@ export default function PrivacyPolicyPage() {
 
           <div className="bg-white border border-gray-200 rounded-2xl p-8">
             <p className="text-gray-700 mb-6">
-              We may collect the following information when you place an order
-              or contact us:
+              We may collect the following information when you place
+              an order or contact us:
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -143,7 +143,9 @@ export default function PrivacyPolicyPage() {
                   <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
                     {use.icon}
                   </div>
-                  <h3 className="font-semibold text-gray-900">{use.title}</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    {use.title}
+                  </h3>
                 </div>
                 <p className="text-gray-600">{use.description}</p>
               </div>
@@ -165,15 +167,15 @@ export default function PrivacyPolicyPage() {
             <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
               <div className="p-4 bg-red-50 border border-red-100 rounded-lg">
                 <p className="text-red-700 font-medium">
-                  We do not sell, trade, or rent your personal information to
-                  third parties.
+                  We do not sell, trade, or rent your personal
+                  information to third parties.
                 </p>
               </div>
 
               <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
                 <p className="text-blue-700">
-                  Information may be shared only with trusted delivery partners
-                  and payment gateways for order fulfillment.
+                  Information may be shared only with trusted delivery
+                  partners and payment gateways for order fulfillment.
                 </p>
               </div>
             </div>
@@ -195,8 +197,8 @@ export default function PrivacyPolicyPage() {
                     <Shield className="text-green-600" size={14} />
                   </div>
                   <p className="text-gray-700">
-                    We implement reasonable security measures to protect your
-                    personal information.
+                    We implement reasonable security measures to
+                    protect your personal information.
                   </p>
                 </div>
 
@@ -205,8 +207,8 @@ export default function PrivacyPolicyPage() {
                     <Lock className="text-green-600" size={14} />
                   </div>
                   <p className="text-gray-700">
-                    Access to personal data is limited to authorized personnel
-                    only.
+                    Access to personal data is limited to authorized
+                    personnel only.
                   </p>
                 </div>
               </div>
@@ -225,11 +227,12 @@ export default function PrivacyPolicyPage() {
               </h3>
             </div>
             <p className="text-gray-600 mb-3">
-              Our website may use cookies to enhance user experience and analyze
-              website performance.
+              Our website may use cookies to enhance user experience
+              and analyze website performance.
             </p>
             <p className="text-gray-700 text-sm">
-              You can choose to disable cookies through your browser settings.
+              You can choose to disable cookies through your browser
+              settings.
             </p>
           </div>
 
@@ -237,15 +240,17 @@ export default function PrivacyPolicyPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <Link className="text-blue-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Third-Party Links</h3>
+              <h3 className="font-semibold text-gray-900">
+                Third-Party Links
+              </h3>
             </div>
             <p className="text-gray-600 mb-3">
-              Our website or social media pages may contain links to third-party
-              websites.
+              Our website or social media pages may contain links to
+              third-party websites.
             </p>
             <p className="text-gray-700 text-sm">
-              Crab Fashion is not responsible for the privacy practices of those
-              websites.
+              Bongo Prime is not responsible for the privacy practices
+              of those websites.
             </p>
           </div>
 
@@ -253,14 +258,17 @@ export default function PrivacyPolicyPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <RefreshCw className="text-blue-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Policy Updates</h3>
+              <h3 className="font-semibold text-gray-900">
+                Policy Updates
+              </h3>
             </div>
             <p className="text-gray-600 mb-3">
-              Crab Fashion reserves the right to update or modify this Privacy
-              Policy at any time.
+              Bongo Prime reserves the right to update or modify this
+              Privacy Policy at any time.
             </p>
             <p className="text-gray-700 text-sm">
-              Changes will be posted on this page with immediate effect.
+              Changes will be posted on this page with immediate
+              effect.
             </p>
           </div>
         </div>
@@ -275,7 +283,9 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div className="bg-linear-to-r from-blue-50 to-cyan-50 rounded-2xl p-8">
-            <p className="text-gray-700 mb-6">You have the right to:</p>
+            <p className="text-gray-700 mb-6">
+              You have the right to:
+            </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userRights.map((right, index) => (
@@ -298,7 +308,8 @@ export default function PrivacyPolicyPage() {
               Privacy Questions?
             </h2>
             <p className="text-gray-700 mb-8 max-w-md mx-auto">
-              For any questions regarding this Privacy Policy, please contact us
+              For any questions regarding this Privacy Policy, please
+              contact us
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">

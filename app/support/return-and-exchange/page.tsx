@@ -18,18 +18,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Return & Exchange Policy | Crab Fashion",
+  title: "Return & Exchange Policy | Bongo Prime",
   description:
-    "Learn about Crab Fashion's return and exchange policy, eligibility criteria, and process.",
+    "Learn about Bongo Prime's return and exchange policy, eligibility criteria, and process.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/return-exchange-policy",
   },
   openGraph: {
-    title: "Return & Exchange Policy | Crab Fashion",
+    title: "Return & Exchange Policy | Bongo Prime",
     description:
-      "Understand our return and exchange process, eligibility, and timelines at Crab Fashion.",
+      "Understand our return and exchange process, eligibility, and timelines at Bongo Prime.",
     url: "https://www.crabfashionbd.com/return-exchange-policy",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -109,8 +109,9 @@ export default function ReturnExchangePolicyPage() {
             Return & Exchange Policy
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            At Crab Fashion, customer satisfaction is our top priority. If
-            you're not fully satisfied with your purchase, we're here to help.
+            At Bongo Prime, customer satisfaction is our top priority.
+            If you're not fully satisfied with your purchase, we're
+            here to help.
           </p>
         </header>
 
@@ -131,7 +132,10 @@ export default function ReturnExchangePolicyPage() {
                   className="flex items-center gap-3 p-4 bg-white rounded-lg border border-green-100"
                 >
                   <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                    <CheckCircle className="text-green-600" size={16} />
+                    <CheckCircle
+                      className="text-green-600"
+                      size={16}
+                    />
                   </div>
                   <span className="text-gray-700">{point}</span>
                 </div>
@@ -153,7 +157,8 @@ export default function ReturnExchangePolicyPage() {
 
             <div className="bg-white border border-rose-100 rounded-xl p-6">
               <p className="text-gray-700 mb-4">
-                The following items are not eligible for return or exchange:
+                The following items are not eligible for return or
+                exchange:
               </p>
               <ul className="space-y-3">
                 {nonReturnableItems.map((item, index) => (
@@ -189,7 +194,9 @@ export default function ReturnExchangePolicyPage() {
                       {reason.title}
                     </h3>
                   </div>
-                  <p className="text-gray-600 text-sm">{reason.description}</p>
+                  <p className="text-gray-600 text-sm">
+                    {reason.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -220,7 +227,9 @@ export default function ReturnExchangePolicyPage() {
                   <h3 className="font-semibold text-gray-900 mb-2">
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <p className="text-gray-600 text-sm">
+                    {step.description}
+                  </p>
                 </div>
                 {step.step < 4 && (
                   <div className="hidden lg:block absolute top-6 -right-3 w-6 h-0.5 bg-gray-200" />
@@ -236,20 +245,24 @@ export default function ReturnExchangePolicyPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <Truck className="text-blue-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Delivery Charges</h3>
+              <h3 className="font-semibold text-gray-900">
+                Delivery Charges
+              </h3>
             </div>
             <div className="space-y-3">
               <div className="p-3 bg-green-50 rounded-lg border border-green-100">
                 <p className="text-green-700 text-sm">
                   <span className="font-medium">
-                    Mistake from Crab Fashion:
+                    Mistake from Bongo Prime:
                   </span>{" "}
                   We bear delivery cost
                 </p>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <p className="text-gray-700 text-sm">
-                  <span className="font-medium">Customer preference:</span>{" "}
+                  <span className="font-medium">
+                    Customer preference:
+                  </span>{" "}
                   Customer pays delivery charges
                 </p>
               </div>
@@ -260,7 +273,9 @@ export default function ReturnExchangePolicyPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <CreditCard className="text-blue-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Refund Policy</h3>
+              <h3 className="font-semibold text-gray-900">
+                Refund Policy
+              </h3>
             </div>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
@@ -282,20 +297,23 @@ export default function ReturnExchangePolicyPage() {
           <div className="bg-white border border-amber-100 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <AlertCircle className="text-amber-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Important Notes</h3>
+              <h3 className="font-semibold text-gray-900">
+                Important Notes
+              </h3>
             </div>
             <ul className="space-y-2 text-gray-700 text-sm">
               <li className="flex items-start gap-2">
                 <span className="text-amber-600 mt-1">•</span>
                 <span>
-                  Crab Fashion reserves the right to reject non-compliant
-                  returns
+                  Bongo Prime reserves the right to reject
+                  non-compliant returns
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-amber-600 mt-1">•</span>
                 <span>
-                  Slight color variation due to lighting/screen is not a defect
+                  Slight color variation due to lighting/screen is not
+                  a defect
                 </span>
               </li>
             </ul>
@@ -338,18 +356,18 @@ export default function ReturnExchangePolicyPage() {
                 className="inline-flex items-center justify-center gap-3 bg-white hover:bg-blue-50 text-blue-700 px-6 py-4 rounded-lg font-medium transition-colors border border-blue-200"
               >
                 <Facebook size={20} />
-                Official Crab Fashion
+                Official Bongo Prime
               </a>
             </div>
 
             <div className="bg-white/80 rounded-xl p-6 max-w-2xl mx-auto">
               <p className="text-gray-700 mb-3">
-                Our customer support team is available to assist you with
-                returns and exchanges
+                Our customer support team is available to assist you
+                with returns and exchanges
               </p>
               <p className="text-gray-600 text-sm">
-                Please have your order number and relevant photos ready when
-                contacting us
+                Please have your order number and relevant photos
+                ready when contacting us
               </p>
             </div>
           </div>
@@ -360,8 +378,8 @@ export default function ReturnExchangePolicyPage() {
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-full">
             <RotateCcw className="text-gray-500" size={18} />
             <span className="text-gray-600 text-sm">
-              Please read all policy details carefully before initiating a
-              return or exchange
+              Please read all policy details carefully before
+              initiating a return or exchange
             </span>
           </div>
         </div>

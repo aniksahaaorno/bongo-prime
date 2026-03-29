@@ -3,18 +3,18 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Crab Fashion",
+  title: "Contact Us | Bongo Prime",
   description:
-    "Get in touch with Crab Fashion. Contact us for support, inquiries, or feedback.",
+    "Get in touch with Bongo Prime. Contact us for support, inquiries, or feedback.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/support/contact",
   },
   openGraph: {
-    title: "Contact Us | Crab Fashion",
+    title: "Contact Us | Bongo Prime",
     description:
-      "Reach out to Crab Fashion for customer support, order inquiries, or general feedback.",
+      "Reach out to Bongo Prime for customer support, order inquiries, or general feedback.",
     url: "https://www.crabfashionbd.com/support/contact",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -32,7 +32,8 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-gray-600 mt-4 max-w-xl mx-auto text-lg">
-            We're here to help. Reach out to us for any inquiries or support.
+            We're here to help. Reach out to us for any inquiries or
+            support.
           </p>
         </header>
 
@@ -44,8 +45,8 @@ export default function ContactPage() {
                 Get in Touch
               </h2>
               <p className="text-gray-600 mb-8">
-                Have questions or need assistance? Our team is ready to help you
-                with any inquiries about our services.
+                Have questions or need assistance? Our team is ready
+                to help you with any inquiries about our services.
               </p>
             </div>
 
@@ -56,7 +57,9 @@ export default function ContactPage() {
                   <MapPin className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Address</h3>
+                  <h3 className="font-medium text-gray-900 mb-1">
+                    Address
+                  </h3>
                   <p className="text-gray-600 leading-relaxed">
                     Government Officers & Employees Housing,
                     <br />
@@ -74,7 +77,9 @@ export default function ContactPage() {
                   <Phone className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Phone</h3>
+                  <h3 className="font-medium text-gray-900 mb-1">
+                    Phone
+                  </h3>
                   <a
                     href="tel:+8801921617705"
                     className="text-gray-600 hover:text-primary transition-colors"
@@ -89,7 +94,9 @@ export default function ContactPage() {
                   <Mail className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Email</h3>
+                  <h3 className="font-medium text-gray-900 mb-1">
+                    Email
+                  </h3>
                   <a
                     href="mailto:crabfashion@gmail.com"
                     className="text-gray-600 hover:text-primary transition-colors break-all"
@@ -120,11 +127,15 @@ export default function ContactPage() {
               Send a Message
             </h2>
             <p className="text-gray-600 mb-8">
-              Fill out the form below and we'll get back to you as soon as
-              possible.
+              Fill out the form below and we'll get back to you as
+              soon as possible.
             </p>
 
-            <form action="/api/contact" method="POST" className="space-y-6">
+            <form
+              action="/api/contact"
+              method="POST"
+              className="space-y-6"
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label

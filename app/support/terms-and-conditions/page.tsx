@@ -14,18 +14,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions | CRAB Fashion",
+  title: "Terms and Conditions | Bongo Prime",
   description:
-    "Read the Terms and Conditions for CRAB Fashion. Understand our policies, return guidelines, and conditions for using our premium clothing services.",
+    "Read the Terms and Conditions for Bongo Prime. Understand our policies, return guidelines, and conditions for using our premium clothing services.",
   alternates: {
     canonical: "https://www.crab-fashion.com/terms-and-conditions",
   },
   openGraph: {
-    title: "Terms and Conditions | CRAB Fashion",
+    title: "Terms and Conditions | Bongo Prime",
     description:
-      "Terms, conditions, and policies governing the use of CRAB Fashion website and premium clothing services.",
+      "Terms, conditions, and policies governing the use of Bongo Prime website and premium clothing services.",
     url: "https://www.crab-fashion.com/terms-and-conditions",
-    siteName: "CRAB Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -45,11 +45,13 @@ export default function TermsAndConditionsPage() {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Terms & Conditions | শর্তাবলি
           </h1>
-          <p className="text-sm text-gray-500">সর্বশেষ আপডেট: জানুয়ারি ২০২৬</p>
+          <p className="text-sm text-gray-500">
+            সর্বশেষ আপডেট: জানুয়ারি ২০২৬
+          </p>
           <div className="mt-6 p-4 bg-linear-to-r from-rose-50 to-pink-50 rounded-xl border border-rose-100">
             <p className="text-gray-700">
-              CRAB Fashion ওয়েবসাইটে স্বাগতম। ওয়েবসাইট ব্যবহার করার মাধ্যমে
-              আপনি নিচের শর্তাবলিতে সম্মত হচ্ছেন।
+              Bongo Prime ওয়েবসাইটে স্বাগতম। ওয়েবসাইট ব্যবহার করার
+              মাধ্যমে আপনি নিচের শর্তাবলিতে সম্মত হচ্ছেন।
             </p>
           </div>
         </header>
@@ -77,9 +79,10 @@ export default function TermsAndConditionsPage() {
                       ১. সাধারণ শর্ত
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
-                      CRAB Fashion যেকোনো সময় শর্তাবলি পরিবর্তন বা আপডেট করার
-                      অধিকার সংরক্ষণ করে। পরিবর্তনের পর ওয়েবসাইট ব্যবহার করলে
-                      তা স্বয়ংক্রিয়ভাবে গ্রহণযোগ্য বলে গণ্য হবে।
+                      Bongo Prime যেকোনো সময় শর্তাবলি পরিবর্তন বা
+                      আপডেট করার অধিকার সংরক্ষণ করে। পরিবর্তনের পর
+                      ওয়েবসাইট ব্যবহার করলে তা স্বয়ংক্রিয়ভাবে
+                      গ্রহণযোগ্য বলে গণ্য হবে।
                     </p>
                   </div>
                 </div>
@@ -96,9 +99,9 @@ export default function TermsAndConditionsPage() {
                       ২. পণ্য ও মূল্য
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
-                      পণ্যের মূল্য, বিবরণ ও স্টক যেকোনো সময় পরিবর্তন হতে পারে।
-                      ডিভাইস বা স্ক্রিন সেটিংসের কারণে পণ্যের রঙে সামান্য
-                      পার্থক্য হতে পারে।
+                      পণ্যের মূল্য, বিবরণ ও স্টক যেকোনো সময় পরিবর্তন
+                      হতে পারে। ডিভাইস বা স্ক্রিন সেটিংসের কারণে
+                      পণ্যের রঙে সামান্য পার্থক্য হতে পারে।
                     </p>
                   </div>
                 </div>
@@ -115,14 +118,17 @@ export default function TermsAndConditionsPage() {
                       ৩. অর্ডার ও পেমেন্ট
                     </h3>
                     <ul className="text-gray-700 space-y-2 pl-1 list-disc list-inside">
-                      <li>অর্ডার কনফার্ম হওয়ার পর তা বাতিল করা যাবে না।</li>
                       <li>
-                        স্টক সমস্যা, মূল্য ভুল বা সন্দেহজনক লেনদেনের ক্ষেত্রে
-                        CRAB Fashion অর্ডার বাতিলের অধিকার রাখে।
+                        অর্ডার কনফার্ম হওয়ার পর তা বাতিল করা যাবে না।
                       </li>
                       <li>
-                        অনুমোদিত পেমেন্ট মেথডের মাধ্যমেই পেমেন্ট সম্পন্ন করতে
-                        হবে।
+                        স্টক সমস্যা, মূল্য ভুল বা সন্দেহজনক লেনদেনের
+                        ক্ষেত্রে Bongo Prime অর্ডার বাতিলের অধিকার
+                        রাখে।
+                      </li>
+                      <li>
+                        অনুমোদিত পেমেন্ট মেথডের মাধ্যমেই পেমেন্ট
+                        সম্পন্ন করতে হবে।
                       </li>
                     </ul>
                   </div>
@@ -140,9 +146,9 @@ export default function TermsAndConditionsPage() {
                       ৪. ডেলিভারি
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
-                      ডেলিভারি সময় এলাকা ও কুরিয়ার সার্ভিসের উপর নির্ভরশীল।
-                      প্রাকৃতিক দুর্যোগ বা কুরিয়ারজনিত দেরির জন্য CRAB Fashion
-                      দায়ী নয়।
+                      ডেলিভারি সময় এলাকা ও কুরিয়ার সার্ভিসের উপর
+                      নির্ভরশীল। প্রাকৃতিক দুর্যোগ বা কুরিয়ারজনিত
+                      দেরির জন্য Bongo Prime দায়ী নয়।
                     </p>
                   </div>
                 </div>
@@ -159,8 +165,9 @@ export default function TermsAndConditionsPage() {
                       ৫. কপিরাইট
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
-                      ওয়েবসাইটের সকল কনটেন্ট (লোগো, ছবি, লেখা, ডিজাইন) CRAB
-                      Fashion এর সম্পত্তি। অনুমতি ছাড়া ব্যবহার আইনত দণ্ডনীয়।
+                      ওয়েবসাইটের সকল কনটেন্ট (লোগো, ছবি, লেখা,
+                      ডিজাইন) CRAB Fashion এর সম্পত্তি। অনুমতি ছাড়া
+                      ব্যবহার আইনত দণ্ডনীয়।
                     </p>
                   </div>
                 </div>
@@ -177,8 +184,9 @@ export default function TermsAndConditionsPage() {
                       ৬. গ্রাহকের দায়িত্ব
                     </h3>
                     <p className="text-gray-700 leading-relaxed">
-                      সঠিক ঠিকানা প্রদান করা গ্রাহকের দায়িত্ব। ভুল ঠিকানার
-                      কারণে পণ্য হারালে CRAB Fashion দায়ী থাকবে না।
+                      সঠিক ঠিকানা প্রদান করা গ্রাহকের দায়িত্ব। ভুল
+                      ঠিকানার কারণে পণ্য হারালে Bongo Prime দায়ী
+                      থাকবে না।
                     </p>
                   </div>
                 </div>
@@ -207,10 +215,12 @@ export default function TermsAndConditionsPage() {
                       ১. রিটার্নের শর্তাবলী
                     </h3>
                     <ul className="text-gray-700 space-y-2 pl-1 list-disc list-inside">
-                      <li>পণ্য পাওয়ার ৩ দিনের মধ্যে রিটার্ন করতে হবে।</li>
                       <li>
-                        পণ্য অবশ্যই অব্যবহৃত, অপরিষ্কারহীন এবং ট্যাগসহ থাকতে
-                        হবে।
+                        পণ্য পাওয়ার ৩ দিনের মধ্যে রিটার্ন করতে হবে।
+                      </li>
+                      <li>
+                        পণ্য অবশ্যই অব্যবহৃত, অপরিষ্কারহীন এবং ট্যাগসহ
+                        থাকতে হবে।
                       </li>
                     </ul>
                   </div>
@@ -228,10 +238,12 @@ export default function TermsAndConditionsPage() {
                       ২. রিটার্ন প্রযোজ্য নয়
                     </h3>
                     <ul className="text-gray-700 space-y-2 pl-1 list-disc list-inside">
-                      <li>ডিসকাউন্ট বা সেল আইটেম রিটার্নযোগ্য নয়।</li>
                       <li>
-                        ইনারওয়্যার, কাস্টমাইজড ও ক্লিয়ারেন্স পণ্য রিটার্ন হবে
-                        না।
+                        ডিসকাউন্ট বা সেল আইটেম রিটার্নযোগ্য নয়।
+                      </li>
+                      <li>
+                        ইনারওয়্যার, কাস্টমাইজড ও ক্লিয়ারেন্স পণ্য
+                        রিটার্ন হবে না।
                       </li>
                     </ul>
                   </div>
@@ -250,10 +262,13 @@ export default function TermsAndConditionsPage() {
                     </h3>
                     <ul className="text-gray-700 space-y-2 pl-1 list-disc list-inside">
                       <li>
-                        রিটার্নের আগে আমাদের অফিসিয়াল নম্বর বা ইমেইলে যোগাযোগ
-                        করতে হবে।
+                        রিটার্নের আগে আমাদের অফিসিয়াল নম্বর বা ইমেইলে
+                        যোগাযোগ করতে হবে।
                       </li>
-                      <li>পূর্ব অনুমতি ছাড়া পাঠানো পণ্য গ্রহণ করা হবে না।</li>
+                      <li>
+                        পূর্ব অনুমতি ছাড়া পাঠানো পণ্য গ্রহণ করা হবে
+                        না।
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -271,12 +286,12 @@ export default function TermsAndConditionsPage() {
                     </h3>
                     <ul className="text-gray-700 space-y-2 pl-1 list-disc list-inside">
                       <li>
-                        শুধুমাত্র ভুল বা ডিফেক্টিভ পণ্যের ক্ষেত্রে রিফান্ড
-                        প্রযোজ্য।
+                        শুধুমাত্র ভুল বা ডিফেক্টিভ পণ্যের ক্ষেত্রে
+                        রিফান্ড প্রযোজ্য।
                       </li>
                       <li>
-                        রিফান্ড মূল পেমেন্ট মেথড বা স্টোর ক্রেডিটে দেওয়া হতে
-                        পারে।
+                        রিফান্ড মূল পেমেন্ট মেথড বা স্টোর ক্রেডিটে
+                        দেওয়া হতে পারে।
                       </li>
                       <li>ডেলিভারি চার্জ ফেরতযোগ্য নয়।</li>
                     </ul>
@@ -297,8 +312,8 @@ export default function TermsAndConditionsPage() {
                     <ul className="text-gray-700 space-y-2 pl-1 list-disc list-inside">
                       <li>স্টক থাকা সাপেক্ষে এক্সচেঞ্জ করা যাবে।</li>
                       <li>
-                        CRAB Fashion এর ভুল না হলে রিটার্ন কুরিয়ার খরচ গ্রাহককে
-                        বহন করতে হবে।
+                        Bongo Prime এর ভুল না হলে রিটার্ন কুরিয়ার খরচ
+                        গ্রাহককে বহন করতে হবে।
                       </li>
                     </ul>
                   </div>
@@ -316,8 +331,8 @@ export default function TermsAndConditionsPage() {
                       গুরুত্বপূর্ণ নোট
                     </h4>
                     <p className="text-gray-700">
-                      CRAB Fashion রিটার্ন, রিফান্ড ও এক্সচেঞ্জ বিষয়ে চূড়ান্ত
-                      সিদ্ধান্ত নেওয়ার অধিকার সংরক্ষণ করে।
+                      Bongo Prime রিটার্ন, রিফান্ড ও এক্সচেঞ্জ বিষয়ে
+                      চূড়ান্ত সিদ্ধান্ত নেওয়ার অধিকার সংরক্ষণ করে।
                     </p>
                   </div>
                 </div>
@@ -334,8 +349,8 @@ export default function TermsAndConditionsPage() {
                 আরো তথ্য প্রয়োজন?
               </h3>
               <p className="text-gray-700">
-                আমাদের শর্তাবলি বা রিটার্ন নীতি সম্পর্কে আপনার কোন প্রশ্ন থাকলে
-                আমাদের সাথে যোগাযোগ করুন।
+                আমাদের শর্তাবলি বা রিটার্ন নীতি সম্পর্কে আপনার কোন
+                প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন।
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -344,7 +359,9 @@ export default function TermsAndConditionsPage() {
                 className="inline-flex items-center gap-2 px-5 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                <span className="font-medium">support@crabfashion.com</span>
+                <span className="font-medium">
+                  support@crabfashion.com
+                </span>
               </a>
               <a
                 href="/contact"

@@ -71,7 +71,8 @@ export const LoginForm = () => {
         router.push("/");
       }
     } catch (err: any) {
-      const message = err?.response?.data?.message || "Something went wrong";
+      const message =
+        err?.response?.data?.message || "Something went wrong";
 
       toast.error(message);
       setLoading(false);
@@ -111,25 +112,38 @@ export const LoginForm = () => {
                   Login
                 </h1>
                 <p className="text-gray-500 text-sm mt-2">
-                  Welcome back to Crab Fashion BD
+                  Welcome back to Bongo Prime BD
                 </p>
               </div>
 
               {successMessage && (
                 <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
-                  <CheckCircle className="text-green-600 shrink-0" size={20} />
-                  <p className="text-green-800 text-sm">{successMessage}</p>
+                  <CheckCircle
+                    className="text-green-600 shrink-0"
+                    size={20}
+                  />
+                  <p className="text-green-800 text-sm">
+                    {successMessage}
+                  </p>
                 </div>
               )}
               {errorMessage && (
                 <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-                  <CheckCircle className="text-red-600 shrink-0" size={20} />
-                  <p className="text-red-800 text-sm">{errorMessage}</p>
+                  <CheckCircle
+                    className="text-red-600 shrink-0"
+                    size={20}
+                  />
+                  <p className="text-red-800 text-sm">
+                    {errorMessage}
+                  </p>
                 </div>
               )}
 
               {/* Login Form */}
-              <form onSubmit={handleLogin} className="space-y-5 sm:space-y-6">
+              <form
+                onSubmit={handleLogin}
+                className="space-y-5 sm:space-y-6"
+              >
                 {/* Email Input */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -172,7 +186,11 @@ export const LoginForm = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
                     >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showPassword ? (
+                        <EyeOff size={20} />
+                      ) : (
+                        <Eye size={20} />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -183,7 +201,9 @@ export const LoginForm = () => {
                     <input
                       type="checkbox"
                       checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
+                      onChange={(e) =>
+                        setRememberMe(e.target.checked)
+                      }
                       className="w-4 h-4 rounded border-gray-300 cursor-pointer accent-primary"
                     />
                     <span className="text-gray-600">Remember me</span>
@@ -241,7 +261,10 @@ export const LoginForm = () => {
               {/* Sign Up Link */}
               <p className="text-center text-gray-600 text-sm mt-6 sm:mt-8">
                 Don't have an account?{" "}
-                <Link href="/auth/sign-up" className="text-primary font-bold">
+                <Link
+                  href="/auth/sign-up"
+                  className="text-primary font-bold"
+                >
                   Sign up here
                 </Link>
               </p>

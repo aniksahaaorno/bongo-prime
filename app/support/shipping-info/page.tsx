@@ -15,18 +15,18 @@ import {
 import { SupportNav } from "../components/supportNavbar";
 
 export const metadata: Metadata = {
-  title: "Shipping Information | Crab Fashion",
+  title: "Shipping Information | Bongo Prime",
   description:
-    "Learn about Crab Fashion's shipping areas, delivery times, charges, and tracking information.",
+    "Learn about Bongo Prime's shipping areas, delivery times, charges, and tracking information.",
   alternates: {
     canonical: "https://www.crabfashionbd.com/shipping-information",
   },
   openGraph: {
-    title: "Shipping Information | Crab Fashion",
+    title: "Shipping Information | Bongo Prime",
     description:
-      "Shipping details including delivery areas, timeframes, charges, and tracking at Crab Fashion.",
+      "Shipping details including delivery areas, timeframes, charges, and tracking at Bongo Prime.",
     url: "https://www.crabfashionbd.com/shipping-information",
-    siteName: "Crab Fashion",
+    siteName: "Bongo Prime",
     type: "website",
   },
 };
@@ -66,7 +66,8 @@ const orderProcessing = [
   {
     icon: <Clock className="text-blue-600" size={20} />,
     title: "Regular Processing",
-    description: "Orders are processed within 24 hours after confirmation",
+    description:
+      "Orders are processed within 24 hours after confirmation",
   },
   {
     icon: <Calendar className="text-blue-600" size={20} />,
@@ -99,8 +100,8 @@ export default function ShippingInformationPage() {
             Shipping Information
           </h1>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
-            At Crab Fashion, we aim to deliver your products quickly and safely
-            across Bangladesh.
+            At Bongo Prime, we aim to deliver your products quickly
+            and safely across Bangladesh.
           </p>
         </header>
 
@@ -118,7 +119,9 @@ export default function ShippingInformationPage() {
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 We currently deliver all over Bangladesh
               </h3>
-              <p className="text-gray-700">Complete nationwide coverage</p>
+              <p className="text-gray-700">
+                Complete nationwide coverage
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -165,17 +168,22 @@ export default function ShippingInformationPage() {
                       {timeframe.time}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-sm">{timeframe.note}</p>
+                  <p className="text-gray-600 text-sm">
+                    {timeframe.note}
+                  </p>
                 </div>
               ))}
             </div>
 
             <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5">
               <div className="flex items-start gap-3">
-                <AlertCircle className="text-amber-600 mt-0.5" size={20} />
+                <AlertCircle
+                  className="text-amber-600 mt-0.5"
+                  size={20}
+                />
                 <p className="text-amber-800 text-sm">
-                  Delivery time may vary due to weather, holidays, or courier
-                  issues
+                  Delivery time may vary due to weather, holidays, or
+                  courier issues
                 </p>
               </div>
             </div>
@@ -198,20 +206,29 @@ export default function ShippingInformationPage() {
                   </h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className="text-gray-700">Inside Dhaka</span>
-                      <span className="font-semibold text-gray-900">BDT _</span>
+                      <span className="text-gray-700">
+                        Inside Dhaka
+                      </span>
+                      <span className="font-semibold text-gray-900">
+                        BDT _
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-3">
-                      <span className="text-gray-700">Outside Dhaka</span>
-                      <span className="font-semibold text-gray-900">BDT _</span>
+                      <span className="text-gray-700">
+                        Outside Dhaka
+                      </span>
+                      <span className="font-semibold text-gray-900">
+                        BDT _
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-gray-600 text-sm">
-                    Shipping charges may vary based on product weight and
-                    location. Final charges will be shown at checkout.
+                    Shipping charges may vary based on product weight
+                    and location. Final charges will be shown at
+                    checkout.
                   </p>
                 </div>
               </div>
@@ -258,11 +275,17 @@ export default function ShippingInformationPage() {
             </div>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-start gap-2">
-                <CheckCircle className="text-green-500 mt-0.5" size={16} />
+                <CheckCircle
+                  className="text-green-500 mt-0.5"
+                  size={16}
+                />
                 <span>Available in selected areas</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="text-green-500 mt-0.5" size={16} />
+                <CheckCircle
+                  className="text-green-500 mt-0.5"
+                  size={16}
+                />
                 <span>Keep exact amount ready at delivery</span>
               </li>
             </ul>
@@ -272,14 +295,17 @@ export default function ShippingInformationPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <Shield className="text-blue-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Courier Partner</h3>
+              <h3 className="font-semibold text-gray-900">
+                Courier Partner
+              </h3>
             </div>
             <p className="text-gray-600 mb-3">
-              We use reliable third-party courier services to ensure safe
-              delivery.
+              We use reliable third-party courier services to ensure
+              safe delivery.
             </p>
             <p className="text-gray-600 text-sm">
-              Once shipped, you'll receive confirmation via SMS/WhatsApp
+              Once shipped, you'll receive confirmation via
+              SMS/WhatsApp
             </p>
           </div>
 
@@ -287,7 +313,9 @@ export default function ShippingInformationPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <PhoneCall className="text-blue-600" size={20} />
-              <h3 className="font-semibold text-gray-900">Order Tracking</h3>
+              <h3 className="font-semibold text-gray-900">
+                Order Tracking
+              </h3>
             </div>
             <p className="text-gray-600 mb-3">
               Tracking information will be shared via:
@@ -317,7 +345,10 @@ export default function ShippingInformationPage() {
                 </h3>
                 <ul className="space-y-2 text-amber-700">
                   {deliveryNotes.map((note, index) => (
-                    <li key={index} className="flex items-start gap-2">
+                    <li
+                      key={index}
+                      className="flex items-start gap-2"
+                    >
                       <span className="mt-1">•</span>
                       <span>{note}</span>
                     </li>
@@ -327,16 +358,17 @@ export default function ShippingInformationPage() {
 
               <div className="bg-gray-50 rounded-lg p-4">
                 <p className="text-gray-700">
-                  <strong>Note:</strong> If delivery fails due to incorrect
-                  address or unreachable phone number, re-delivery charges may
-                  apply.
+                  <strong>Note:</strong> If delivery fails due to
+                  incorrect address or unreachable phone number,
+                  re-delivery charges may apply.
                 </p>
               </div>
 
               <div className="bg-red-50 border border-red-100 rounded-lg p-4">
                 <p className="text-red-700 text-sm">
-                  Crab Fashion is not responsible for delays caused by courier
-                  companies or natural circumstances beyond our control.
+                  Bongo Prime is not responsible for delays caused by
+                  courier companies or natural circumstances beyond
+                  our control.
                 </p>
               </div>
             </div>
@@ -350,7 +382,8 @@ export default function ShippingInformationPage() {
               Shipping Questions?
             </h2>
             <p className="text-gray-700 mb-8 max-w-md mx-auto">
-              For any shipping-related queries, please contact our support team
+              For any shipping-related queries, please contact our
+              support team
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">

@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Crab Fashion BD",
+  title: "Bongo Prime",
   description: "Build your trust",
 };
 
