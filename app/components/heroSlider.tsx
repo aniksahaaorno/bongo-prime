@@ -11,7 +11,7 @@ interface SliderContainer {
   images: string[];
 }
 
-export interface  ProductSliderSectionProps {
+export interface ProductSliderSectionProps {
   mainSlider: SliderContainer;
   sideSliders: SliderContainer[];
 }
@@ -24,7 +24,9 @@ const SingleSlider = ({
   isMain?: boolean;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState<"left" | "right">("right");
+  const [direction, setDirection] = useState<"left" | "right">(
+    "right",
+  );
 
   const handlePrev = () => {
     setDirection("left");
@@ -42,9 +44,12 @@ const SingleSlider = ({
 
   // Auto-slide effect
   useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, Math.floor(Math.random() * (7000 - 3000 + 1)) + 3000);
+    const interval = setInterval(
+      () => {
+        handleNext();
+      },
+      Math.floor(Math.random() * (7000 - 3000 + 1)) + 3000,
+    );
     return () => clearInterval(interval);
   }, [currentIndex, slider.images.length]);
 
@@ -128,23 +133,8 @@ export default function ProductSliderSection({
         {/* Main Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
           {/* Main Slider - Takes full width on mobile, 2 cols on desktop */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-full">
             <SingleSlider slider={mainSlider} isMain={true} />
-          </div>
-
-          {/* Side Sliders Container */}
-          <div className="grid grid-cols-2 gap-2 md:gap-6 lg:flex lg:flex-col lg:gap-6">
-            {sideSliders.map((slider) => (
-              <div
-                key={slider.id}
-                className={`${sideSliders.length === 2 ? "col-span-1" : ""}`}
-              >
-                <SingleSlider slider={slider} isMain={false} />
-                {/* {slider.title && (
-                  <h3 className="text-sm md:text-base font-semibold mt-3 md:mt-4 text-gray-900">{slider.title}</h3>
-                )} */}
-              </div>
-            ))}
           </div>
         </div>
       </div>

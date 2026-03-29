@@ -7,8 +7,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --primary: hsl(349, 100, 50);    
-  --primary-dark: #1e5bb8;
+  --primary: #1A65B4;    
+  --primary-dark: #1A65B4;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
